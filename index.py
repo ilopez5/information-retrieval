@@ -11,6 +11,15 @@ class index:
 		#function to read documents from collection, tokenize and build the index with tokens
 		#index should also contain positional information of the terms in the document --- term: [(ID1,[pos1,pos2,..]), (ID2, [pos1,pos2,…]),….]
 		#use unique document IDs
+		index = {}
+		docID = 1		
+		for doc in collections:
+			
+			
+			docID += 1
+
+
+
 
 	def and_query(self, query_terms):
 	#function for identifying relevant docs using the index
