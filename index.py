@@ -17,7 +17,7 @@ class index:
 
 		docID = 1		
 		for doc in os.listdir(self.path):							# Walks through dir
-			doc_string = open("Text-%i.txt" %docID, "r")					# Save file contents as one string 
+			doc_string = open("Text-{}.txt".format(docID), "r")					# Save file contents as one string 
 			tok_list = doc_string.lower().split()						# Creates a list of lower case tokens
 
 			pos = 1										# Counter that marks position in document
@@ -44,9 +44,12 @@ class index:
 
 	def and_query(self, query_terms):
 	#function for identifying relevant docs using the index
+		print('Results for the Query: ')
+
+
 
 	def print_dict(self):
-    #function to print the terms and posting list in the index
+		#function to print the terms and posting list in the index
 		for term,pos_list in self.index.items():
 			print(term, ':', pos_list)
 
@@ -56,6 +59,4 @@ class index:
 	# function to print the documents and their document id
 		docID = 1
 		for doc in os.listdir(self.path):
-			doc_string = open("Text-%i.txt" %docID, "r")
-			print("Doc. ID: %i\n" %docID)
-			print(doc_string)
+			print("Doc ID: {0}  ==> Text-{0}.txt".format(docID))
