@@ -16,25 +16,25 @@ class index:
 
 		docID = 1
 		punct = ".,;:'!?"		
-		for file in os.listdir(self.path):								# Walks through dir
+		for file in os.listdir(self.path):							# Walks through dir
 			doc_string = open("Text-%i.txt" %docID, "r")					# Save file contents as one string 
 			tok_list = doc_string.lower().split()						# Creates a list of lower case tokens
 
-			pos = 1											# Counter that marks position in document
-			for term in tok_list:									# Walks thru file tokens (already in list)
+			pos = 1										# Counter that marks position in document
+			for term in tok_list:								# Walks thru file tokens (already in list)
 				if term in punct:
-					#pos += 1								# Do I want to increment pos after this?
+					#pos += 1							# Do I want to increment pos after this?
 					continue
 				elif term not in self.index:
 					self.index[term] = [(docID, [pos])]
 					pos += 1
 				else:
 					for i in range(len(self.index[term])):
-						if self.index[term][i][0] == docID:				# Current docID: Not first case
+						if self.index[term][i][0] == docID:			# Current docID: Not first case
 							self.index[term][i][1].append(pos)
 							pos += 1
 							break
-						elif i == len(self.index[term])-1:				# Current docID: First case
+						elif i == len(self.index[term])-1:			# Current docID: First case
 							self.index[term].insert(i, (docID, [pos]))
 							pos += 1
 
