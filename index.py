@@ -46,7 +46,16 @@ class index:
 	#function for identifying relevant docs using the index
 
 	def print_dict(self):
-        #function to print the terms and posting list in the index
+    #function to print the terms and posting list in the index
+		for term,pos_list in self.index.items():
+			print(term, ':', pos_list)
+
+
 
 	def print_doc_list(self):
 	# function to print the documents and their document id
+		docID = 1
+		for doc in os.listdir(self.path):
+			doc_string = open("Text-%i.txt" %docID, "r")
+			print("Doc. ID: %i\n" %docID)
+			print(doc_string)
