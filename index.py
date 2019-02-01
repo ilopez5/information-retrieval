@@ -17,11 +17,10 @@ class index:
 		docID = 1
 		punct = ".,;:'!?"		
 		for file in os.listdir(self.path):								# Walks through dir
-			#tok_list = []										# Declare list for tokens ?Might not need?
-			x = open("Text-%i.txt" %docID, "r")							# Save file contents as one string 
-			tok_list = x.split().lower()								# Creates a list of lower case tokens
-			pos = 1											# Counter that marks position in document
+			doc_string = open("Text-%i.txt" %docID, "r")					# Save file contents as one string 
+			tok_list = doc_string.lower().split()						# Creates a list of lower case tokens
 
+			pos = 1											# Counter that marks position in document
 			for term in tok_list:									# Walks thru file tokens (already in list)
 				if term in punct:
 					#pos += 1								# Do I want to increment pos after this?
