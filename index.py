@@ -8,22 +8,21 @@ class index:
 	def __init__(self,path):
 		self.path = path
 		self.index = {}
+		self.punct = ".,;:'!?"
 
 	def buildIndex(self):
 		#function to read documents from collection, tokenize and build the index with tokens
 		#index should also contain positional information of the terms in the document --- term: [(ID1,[pos1,pos2,..]), (ID2, [pos1,pos2,…]),….]
 		#use unique document IDs
 
-		docID = 1
-		punct = ".,;:'!?"		
-		for file in os.listdir(self.path):							# Walks through dir
+		docID = 1		
+		for doc in os.listdir(self.path):							# Walks through dir
 			doc_string = open("Text-%i.txt" %docID, "r")					# Save file contents as one string 
 			tok_list = doc_string.lower().split()						# Creates a list of lower case tokens
 
 			pos = 1										# Counter that marks position in document
 			for term in tok_list:								# Walks thru file tokens (already in list)
-				if term in punct:
-					#pos += 1							# Do I want to increment pos after this?
+				if term in self.punct:
 					continue
 				elif term not in self.index:
 					self.index[term] = [(docID, [pos])]
