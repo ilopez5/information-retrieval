@@ -1,4 +1,3 @@
-#Python 2.7.3
 import re
 import os
 import collections
@@ -8,23 +7,21 @@ class index:
 	def __init__(self,path):
 		self.path = path
 		self.index = {}
-		self.punct = ".,;:'!?"
 
 	def buildIndex(self):
 		#function to read documents from collection, tokenize and build the index with tokens
 		#index should also contain positional information of the terms in the document --- term: [(ID1,[pos1,pos2,..]), (ID2, [pos1,pos2,…]),….]
 		#use unique document IDs
-
+		start = time.time()
 		docID = 1		
 		for doc in os.listdir(self.path):							# Walks through dir
-			doc_string = open("Text-{}.txt".format(docID), "r")					# Save file contents as one string 
-			tok_list = doc_string.lower().split()						# Creates a list of lower case tokens
+			file_obj = open(doc, "r")								# Save file contents as one string 
+			doc_string = os.read(file_obj).lower()					# Creates a list of lower case tokens
+			tok_list = re.split(r"\W", doc_string)
 
-			pos = 1										# Counter that marks position in document
-			for term in tok_list:								# Walks thru file tokens (already in list)
-				if term in self.punct:
-					continue
-				elif term not in self.index:
+			pos = 1													# Counter that marks position in document
+			for term in tok_list:									# Walks thru file tokens (already in list)
+				if term not in self.index:
 					self.index[term] = [(docID, [pos])]
 					pos += 1
 				else:
@@ -38,6 +35,8 @@ class index:
 							pos += 1
 
 			docID += 1
+		end = time.time()
+		print("Index built in {} seconds.".format(end-start))	
 
 
 
