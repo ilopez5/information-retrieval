@@ -77,7 +77,7 @@ class Index:
 						contender = self.index[i][point[i]][0]					# set new contender 	
 						num_comp = 0											# reset comparison counter
 						continue
-					if num_comp	== size_q-1 and not done:					# if contender been compared with all
+					if num_comp == size_q-1 and not done:					# if contender been compared with all
 						result.append(contender)								# add contender to results list
 						if point[i] == len(self.index[i]) - 1:					# checks if curr_idx is last element
 							done = True											# set condition to stop all
