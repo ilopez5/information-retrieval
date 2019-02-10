@@ -44,12 +44,14 @@ class Index:
 
 		size_q = len(query_terms)											# store size so we calculate once
 		result = []															# list to output when done
-		point = {}															# 'Pointers' to indexes for querie terms
+		point = {}															# 'Pointers' to indexes for query terms
+		skip = {}															# 'Skip Pointers' 
 		base, done = True, False											# Boolean variables to be used
 		num_comp = 0														# initializing comparison counter
 		
 		for i in query_terms:
-			point[i] = 0
+			skip[i] = int((len(self.index[i]))**(1/2))						# Set skip pointer relative to size of word's posting list
+			point[i] = 0													# Initialize each word's pointer to 0. We will adjust these as we go
 
 		while not done:
 			for i in query_terms:											# loops through query terms
@@ -60,17 +62,17 @@ class Index:
 				elif done:														# Use this to break out of for loop
 					break				
 				else:
-					while self.index[i][point[i]][0] <= contender:			# docID <= contender?				
+					while self.index[i][point[i]][0] <= contender:			# docID <= contender? This loop repeats until pointer catches up
 						if self.index[i][point[i]][0] == contender:				# docID = contender?
 							num_comp += 1										# comp ++
 							break												# break to next word
-						elif point[i] == len(self.index[i])-1:					# checks if curr_idx is last element
+						elif point[i] == len(self.index[i])-1:					# checks if curr_idx is last element (end condition)
 							done = True											# Set condition to stop all
 							break
 						else:
-							if point[i] <= len(self.index[i])-6:				# check curr_idx < 5th to last element
-								if self.index[i][point[i]+5][0] < contender:	# peek to compare docID w/ contender
-									point[i] += 5								# increment by 5 is less than
+							if point[i] <= len(self.index[i])-(skip[i]+1):			# Makes sure we dont go out of index range (for skip check)
+								if self.index[i][point[i]+skip[i]][0] < contender:	# Checks if skip pointer less than current id
+									point[i] += skip[i]								# increments pointer by the skip length
 									continue
 							point[i] += 1										# increment by 1 otherwise
 					else:													# docID > contender
