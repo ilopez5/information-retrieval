@@ -8,7 +8,7 @@ I create two dictionaries named **point** and **skip**.
 For every word in the query, I pass it into both dictionaries but with different values.
 
 #### In **_point_**:
-I set them equal to 0. This signifies the index they are to be pointing at in the posting list.
+I set them equal to 0. This signifies the index they are to be pointing at in the posting list (at least initially). These will be adjusted as posting lists are searched.
 
 #### In **_skip_**:
 I calculate the length of the current word's posting length. Then, I set the skip distance to [the square root of that length](https://nlp.stanford.edu/IR-book/html/htmledition/faster-postings-list-intersection-via-skip-pointers-1.html). In other words, the longer the posting list for a word, the longer the skip distance.
