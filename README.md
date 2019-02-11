@@ -1,4 +1,5 @@
 # Assignment 1
+Ismael Lopez
 
 
 ### Merge Algorithm
