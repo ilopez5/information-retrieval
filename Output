@@ -1,4 +1,4 @@
-Index built in 6.519486347679049 seconds.
+Index built in 6.335841208230704 seconds.
 Results for the Query: red AND china
 Total Docs retrieved: 57
 Text-382.txt
@@ -58,7 +58,7 @@ Text-7.txt
 Text-19.txt
 Text-169.txt
 Text-315.txt
-Retrieved in 0.00021616928279399872 seconds.
+Retrieved in 0.00030276598408818245 seconds.
 Results for the Query: home AND with
 Total Docs retrieved: 107
 Text-382.txt
@@ -168,7 +168,7 @@ Text-345.txt
 Text-283.txt
 Text-241.txt
 Text-344.txt
-Retrieved in 0.0003919568844139576 seconds.
+Retrieved in 0.00038840994238853455 seconds.
 Results for the Query: high AND run AND for
 Total Docs retrieved: 14
 Text-334.txt
@@ -185,7 +185,7 @@ Text-43.txt
 Text-94.txt
 Text-252.txt
 Text-79.txt
-Retrieved in 0.0003404291346669197 seconds.
+Retrieved in 0.0003530988469719887 seconds.
 Results for the Query: just AND very AND gone
 Total Docs retrieved: 5
 Text-349.txt
@@ -193,7 +193,7 @@ Text-121.txt
 Text-294.txt
 Text-296.txt
 Text-307.txt
-Retrieved in 0.00011927494779229164 seconds.
+Retrieved in 0.0001220041885972023 seconds.
 Results for the Query: go AND there AND now
 Total Docs retrieved: 39
 Text-271.txt
@@ -235,4 +235,4 @@ Text-328.txt
 Text-270.txt
 Text-99.txt
 Text-110.txt
-Retrieved in 0.000375295989215374 seconds.
+Retrieved in 0.00038174400106072426 seconds.
