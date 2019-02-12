@@ -64,10 +64,10 @@ class Index:
 				else:
 					while self.index[i][point[i]][0] <= contender:			# docID <= contender? This loop repeats until pointer catches up
 						if self.index[i][point[i]][0] == contender:				# docID = contender?
-							num_comp += 1										# comp ++
-							break												# break to next word
+							num_comp += 1											# comp ++
+							break													# break to next word
 						elif point[i] == len(self.index[i])-1:					# checks if curr_idx is last element (end condition)
-							done = True											# Set condition to stop all
+							done = True												# Set condition to stop all
 							break
 						else:
 							if point[i] <= len(self.index[i])-(skip[i]+1):			# Makes sure we dont go out of index range (for skip check)
@@ -86,6 +86,9 @@ class Index:
 							break
 						else:												# we are safe to adjust pointers +1
 							for k in point:										# does the incrementing
+								if point[k] == len(self.index[k])-1:
+									done = True
+									break
 								point[k] += 1
 							contender = self.index[i][point[i]][0]				# sets new contender
 							num_comp = 0										# resets comparison counter
@@ -112,4 +115,8 @@ class Index:
 if __name__ == '__main__':
 	index = Index('collection')
 	index.buildIndex()
-	index.and_query(['with','without','yemen'])
+	index.and_query(['red','china'])
+	index.and_query(['home','with'])
+	index.and_query(['high','run','for'])
+	index.and_query(['just','very','gone'])
+	index.and_query(['go','there','now'])
