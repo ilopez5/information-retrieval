@@ -42,21 +42,21 @@ class Index:
 	def exact_query(self, query_terms, k):
 	#function for exact top K retrieval (method 1)
 	#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
-	
+
 	def inexact_query_champion(self, query_terms, k):
 	#function for exact top K retrieval using champion list (method 2)
 	#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
-	
+
 	def inexact_query_index_elimination(self, query_terms, k):
 	#function for exact top K retrieval using index elimination (method 3)
 	#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
-	
+
 	def inexact_query_cluster_pruning(self, query_terms, k):
 	#function for exact top K retrieval using cluster pruning (method 4)
 	#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
 
 	def print_dict(self):
-        #function to print the terms and posting list in the index
+		#function to print the terms and posting list in the index
 
 	def print_doc_list(self):
 	# function to print the documents and their document id
