@@ -46,23 +46,23 @@ class Index:
 		print("Index built in {} seconds.".format(end-start))
 
 	def exact_query(self, query_terms, k):
-	#function for exact top K retrieval (method 1)
-	#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
+		#function for exact top K retrieval (method 1)
+		#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
 		pass
 
 	def inexact_query_champion(self, query_terms, k):
-	#function for exact top K retrieval using champion list (method 2)
-	#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
+		#function for exact top K retrieval using champion list (method 2)
+		#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
 		pass
 
 	def inexact_query_index_elimination(self, query_terms, k):
-	#function for exact top K retrieval using index elimination (method 3)
-	#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
+		#function for exact top K retrieval using index elimination (method 3)
+		#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
 		pass
 
 	def inexact_query_cluster_pruning(self, query_terms, k):
-	#function for exact top K retrieval using cluster pruning (method 4)
-	#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
+		#function for exact top K retrieval using cluster pruning (method 4)
+		#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
 		pass
 
 	def print_dict(self):
