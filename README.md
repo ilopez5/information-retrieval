@@ -1,5 +1,9 @@
-# Assignment 1
+# Repo for CS 429: Information Retrieval
 
 
-### New Index
-In this assignment, buildIndex was changed...
+### Assignment 1
+1. Creating an Inverted Index
+2. Implementing an AND query Boolean search
+
+### Assignment 2
+1. ...
