@@ -14,6 +14,7 @@ class Index:
 		self.path = path
 		self.index = {}
 		self.docID_map = {}
+		self.stop_list = [a,an,and,are,as,at,be,by,for,from,has,he,in,is,it,its,of,on,that,the,to,was,were,will,with]
 
 	def buildIndex(self):
 		#function to read documents from collection, tokenize and build the index with tokens
@@ -25,6 +26,8 @@ class Index:
 			self.docID_map[docID] = doc
 
 			for pos, term in enumerate(tok_list, 1):
+				if term in self.stop_list:
+					continue
 				if term not in self.index:
 					self.index[term] = [0, (docID, 1, [pos])]
 				else:
@@ -58,7 +61,8 @@ class Index:
 	#function for exact top K retrieval using cluster pruning (method 4)
 	#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
 		pass
-		
+
+
 	def print_dict(self):
 		#function to print the terms and posting list in the index
 		for term,pos_list in self.index.items():
