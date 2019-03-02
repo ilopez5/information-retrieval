@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+
 #Python 3.0
 import re
 import os
@@ -61,3 +64,7 @@ class Index:
 	def print_doc_list(self):
 	# function to print the documents and their document id
 		pass
+
+if __name__ == '__main__':
+	index = Index('collection')
+	index.buildIndex()
