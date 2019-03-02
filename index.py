@@ -14,11 +14,11 @@ class Index:
 		self.path = path
 		self.index = {}
 		self.docID_map = {}
-		self.stop_list = ['a','an','and','are','as','at','be','by','for','from','has','he','in','is','it','its','of','on','that','the','to','was','were','will','with']
 
 	def buildIndex(self):
 		#function to read documents from collection, tokenize and build the index with tokens
 		start = time.perf_counter()
+		stop_list = ['a','an','and','are','as','at','be','by','for','from','has','he','in','is','it','its','of','on','that','the','to','was','were','will','with']
 		for docID, doc in enumerate(os.listdir(self.path), 1):
 			with open(os.path.join(self.path, doc), 'r') as file_obj:
 				doc_string = file_obj.read().lower()
@@ -26,7 +26,7 @@ class Index:
 			self.docID_map[docID] = doc
 
 			for pos, term in enumerate(tok_list, 1):
-				if term in self.stop_list:
+				if term in stop_list:
 					continue
 				if term not in self.index:
 					self.index[term] = [0, (docID, 1, [pos])]
