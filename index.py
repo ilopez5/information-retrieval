@@ -58,12 +58,16 @@ class Index:
 	#function for exact top K retrieval using cluster pruning (method 4)
 	#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
 		pass
+		
 	def print_dict(self):
 		#function to print the terms and posting list in the index
-		pass
+		for term,pos_list in self.index.items():
+			print(term, ':', pos_list)
+
 	def print_doc_list(self):
-	# function to print the documents and their document id
-		pass
+		# function to print the documents and their document id
+		for docID, doc in self.doc_list.items():
+			print("Doc ID: {0}  ==> {1}".format(docID, doc))
 
 if __name__ == '__main__':
 	index = Index('collection')
