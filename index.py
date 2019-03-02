@@ -14,7 +14,7 @@ class Index:
 		self.path = path
 		self.index = {}
 		self.docID_map = {}
-		self.stop_list = [a,an,and,are,as,at,be,by,for,from,has,he,in,is,it,its,of,on,that,the,to,was,were,will,with]
+		self.stop_list = ['a','an','and','are','as','at','be','by','for','from','has','he','in','is','it','its','of','on','that','the','to','was','were','will','with']
 
 	def buildIndex(self):
 		#function to read documents from collection, tokenize and build the index with tokens
