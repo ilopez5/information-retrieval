@@ -1,4 +1,4 @@
-# Repo for CS 429: Information Retrieval
+# CS 429: Information Retrieval
 
 
 ### Assignment 1
