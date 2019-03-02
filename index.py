@@ -38,7 +38,7 @@ class Index:
 							self.index[term].append((docID, 1,[pos]))
 		# N = len(self.docID_map)	| df_t = len(self.index[term]) - 1	| idf_t = log10(N/df_t)
 		for term in self.index:
-			self.index[term][0] = math.log10((len(self.docID_map)) / (len(self.index[term]) - 1))
+			self.index[term][0] = round(math.log10((len(self.docID_map)) / (len(self.index[term]) - 1)), 4)
 		end = time.perf_counter()
 		print("Index built in {} seconds.".format(end-start))
 
