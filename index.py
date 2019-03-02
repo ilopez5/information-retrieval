@@ -26,7 +26,7 @@ class Index:
 
 			for pos, term in enumerate(tok_list, 1):
 				if term not in self.index:
-					self.index[term] = [0, (docID, 0, [pos])]
+					self.index[term] = [0, (docID, 1, [pos])]
 				else:
 					for i in range(1,len(self.index[term])):
 						curr_docID, weight, positions = self.index[term][i]
