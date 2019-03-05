@@ -23,34 +23,74 @@ class Index:
 			with open(os.path.join(self.path, doc), 'r') as file_obj:
 				doc_string = file_obj.read().lower()
 			tok_list = filter(None, re.split(r"\W+", doc_string))
-			self.docID_map[docID] = doc
+			self.docID_map[docID] = [doc, 0]
 
 			for pos, term in enumerate(tok_list, 1):
 				if term in stop_list:
 					continue
 				if term not in self.index:
 					self.index[term] = [0, (docID, 1, [pos])]
+					self.docID_map[docID][1] += 1
 				else:
 					for i in range(1,len(self.index[term])):
 						curr_docID, weight, positions = self.index[term][i]
 						if curr_docID == docID:
 							positions.append(pos)
+							self.docID_map[docID][1] += 1
 							weight = 1 + math.log10(len(positions)) # tf_td = len(positions)
 							break
 						elif i == len(self.index[term])-1:
-							self.index[term].append((docID, 1,[pos]))
+							self.index[term].append((docID, 1, [pos]))
+							self.docID_map[docID][1] += 1
 		# N = len(self.docID_map)	| df_t = len(self.index[term]) - 1	| idf_t = log10(N/df_t)
 		for term in self.index:
 			self.index[term][0] = round(math.log10((len(self.docID_map)) / (len(self.index[term]) - 1)), 4)
 		end = time.perf_counter()
 		print("Index built in {} seconds.".format(end-start))
 
+
+
 	def exact_query(self, query_terms, k):
 		#function for exact top K retrieval (method 1)
 		#Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
-		matches = find_match(query_terms)
+		matches = self.find_match(query_terms)
+		scores = [(0,0)]*k
+		vector_q = [self.index[term][0] for term in query_terms]
+
 		for document in matches:
-			
+			# Generate the document vector
+			# Find the cosine similarity score
+			# Insert it into scores list (based on score)
+			vector_d = []
+			for term in query_terms:
+				for i in range(1, len(self.index[term])):
+					if self.index[term][i][0] == document:
+						vector_d.append(self.index[term][i][1]*self.index[term][0])
+						break
+
+			score = 0
+			for j in range(len(vector_q)):	
+				score += vector_q[j]*vector_d[j]
+
+			norm = (len(vector_q)*len(vector_d))**(2)
+			score = score / norm
+
+			for y in range(len(vector_q)):
+				if scores[y][1] <= score:
+					scores.insert(y, (document, score))
+					break
+
+		# Once complete
+
+		for x in range(k):
+			if scores[x] == (0,0):
+				break
+			print(self.docID_map[scores[x][0]][0], " Score: {0}".format(round(scores[x][1], 4)))
+
+
+
+
+
 
 	def inexact_query_champion(self, query_terms, k):
 		#function for exact top K retrieval using champion list (method 2)
@@ -77,7 +117,7 @@ class Index:
 		for docID, doc in self.doc_list.items():
 			print("Doc ID: {0}  ==> {1}".format(docID, doc))
 
-	def find_match(self, query_terms:
+	def find_match(self, query_terms):
 		size_q = len(query_terms)											# store size so we calculate once
 		result = []															# list to output when done
 		point = {}															# 'Pointers' to indexes for query terms
@@ -87,12 +127,12 @@ class Index:
 		
 		for i in query_terms:
 			skip[i] = int((len(self.index[i]))**(1/2))						# Set skip pointer relative to size of word's posting list
-			point[i] = 0													# Initialize each word's pointer to 0. We will adjust these as we go
+			point[i] = 1													# Initialize each word's pointer to 0. We will adjust these as we go
 
 		while not done:
 			for i in query_terms:											# loops through query terms
 				if base:														# base case
-					contender = self.index[i][0][0]								# set initial element to contender	
+					contender = self.index[i][1][0]								# set initial element to contender	
 					base = False												# So we dont do this again
 					continue
 				elif done:														# Use this to break out of for loop
@@ -133,3 +173,4 @@ class Index:
 if __name__ == '__main__':
 	index = Index('collection')
 	index.buildIndex()
+	index.exact_query(['red', 'china'], 10)
