@@ -163,8 +163,6 @@ class Index:
         print("Results retrieved in {} seconds".format(end-start))
         ########################## End of Function ############################
 
-
-
     def inexact_query_index_elimination(self, query_terms, k):
         #function for inexact top K retrieval using index elimination (method 3)
         start = time.perf_counter()
