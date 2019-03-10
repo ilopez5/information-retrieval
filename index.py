@@ -343,6 +343,7 @@ class Index:
                         break
         ############## Clusters have been created ##############
         
+        ############## Compare Vector with Leaders #######################
         order = []
         for lead in self.group: # iterate over every leader
             cos_score = 0
@@ -354,13 +355,17 @@ class Index:
             order.append((lead, cos_score))
         order = sorted(order, key=lambda tup: -tup[1])
         rank_list.append(order[0])
+        ##################################################################
 
+        ############# List of Documents to Score (in order) ##############
         doc_list = []
         for key in self.group:
             doc_list.append(key)
             for tup in self.group[key]:
                 doc_list.append(self.group[key][tup][0])
+        ##################################################################
         
+        ##################### Populate Ranked List #######################
         for doc in doc_list:
             if rank_list[0] == order[0]:
                 continue
@@ -377,10 +382,14 @@ class Index:
                 if rank_list[i][1] <= cos_score:
                     rank_list.insert(i, (doc, cos_score))
                     break
+        ##################################################################
 
+        ################### Print Top K & Performance Time ####################
+        for i in range(k):
+            print(f"{self.documents[rank_list[i][0]][0]:<13}, Score: {round(rank_list[i][1], 6)}")
         end = time.perf_counter()
-        print("That took {} seconds.".format(end-start))
-
+        print("Results retrieved in {} seconds".format(end-start))
+        ########################## End of Function ############################
 
     def print_dict(self):
         #function to print the terms and posting list in the index
