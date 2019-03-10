@@ -17,6 +17,7 @@ class Index:
         self.documents = {}
         self.champion = {}
         self.stop_list = ['a','an','and','are','as','at','be','by','for','from','has','he','in','is','it','its','of','on','that','the','to','was','were','will','with']
+        self.group = {}
 
     def buildIndex(self):
         #function to read documents from collection, tokenize and build the index with tokens
@@ -26,7 +27,7 @@ class Index:
             with open(os.path.join(self.path, doc), 'r') as file_obj:
                 doc_string = file_obj.read().lower()
             tok_list = filter(None, re.split(r"\W+", doc_string))
-            self.documents[docID] = [doc, [], [], []]
+            self.documents[docID] = [doc, [], [], [], []]
             for pos, term in enumerate(tok_list, 1):
                 if term in self.stop_list:
                     continue
@@ -282,11 +283,75 @@ class Index:
         ########################## End of Function ############################
 
     def inexact_query_cluster_pruning(self, query_terms, k):
-        #function for exact top K retrieval using cluster pruning (method 4)
-        leaders = []
-        for i in range(int(math.sqrt(len(self.documents)))):
-            leaders.append(random.randint(1,len(self.documents)))
-        print(leaders)
+        # function for exact top K retrieval using cluster pruning (method 4)
+        start = time.perf_counter()
+        rank_list = [(0,0)]
+        ############### Generating Query Vector ###############################
+        q_list = re.split(r"\W+", query_terms.lower())
+        vector_q = [(term, self.index[term][0]) for term in q_list if term not in self.stop_list]
+        ltwo_q = 0
+        for i in range(len(vector_q)):
+            ltwo_q += (vector_q[i][1])**(2)
+        norm_q = math.sqrt(ltwo_q)
+        for i in range(len(vector_q)):
+            vector_q[i] = (vector_q[i][0], vector_q[i][1] / norm_q)
+        ############# Query vector is now normalized ##########################
+        
+        ############# Create Clusters! #################
+        if len(self.group) == 0:
+
+            ################## Generate Leaders ####################
+            leaders = []
+            for i in range(int(math.sqrt(len(self.documents)))):
+                leaders.append(random.randint(1,len(self.documents)))
+            for lead in leaders:
+                self.group[lead] = []
+            ########################################################
+            
+            ###################### Generating Vectors for All Docs ####################
+            for term in self.index:
+                for i in range(1, len(self.index[term])):
+                    self.documents[self.index[term][i][0]][4].append((term, self.index[term][i][1]*self.index[term][0]))
+            #######################################################################
+
+            ###################### Normalizing Doc Vectors ########################
+            ltwo_d = 0
+            for doc in self.documents:
+                for i in range(len(self.documents[doc][4])):
+                    ltwo_d += (self.documents[doc][4][i][1])**(2)
+                norm_d = math.sqrt(ltwo_d)
+                for i in range(len(self.documents[doc][4])):
+                    self.documents[doc][4][i] = (self.documents[doc][4][i][0], self.documents[doc][4][i][1] / norm_d)
+            #######################################################################
+
+            ############# Calculate Cosine Scores ##################
+            for doc in self.documents:                                # Iterate over all non-leader documents
+                #print("doc")
+                if doc in leaders:
+                    continue
+                cos_score = 0
+                my_lead = []
+                for lead in leaders:                                    # Iterate over all leaders
+                    #print("lead")
+                    for i in range(len(self.documents[doc][4])):            # Iterate over each element in doc vector
+                        #print("i")
+                        for j in range(len(self.documents[lead][4])):            # Iterate over each element in leader vector
+                            #print("j")
+                            if self.documents[doc][4][i][0] == self.documents[lead][4][j][0]:
+                                cos_score += self.documents[doc][4][i][1]*self.documents[lead][4][j][1]
+                                break
+                    # Have cosine score b/n doc and lead now
+                    my_lead.append((lead, cos_score))
+                my_lead = sorted(my_lead, key=lambda tup: -tup[1])
+                #print(doc, my_lead)
+                self.group[my_lead[0][0]].append(doc)
+
+            ############## Clusters have been created ##############
+        end = time.perf_counter()
+        for lead in self.group:
+            print(lead, self.group[lead])
+        print("That took {} seconds.".format(end-start))
+
 
     def print_dict(self):
         #function to print the terms and posting list in the index
