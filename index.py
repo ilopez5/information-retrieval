@@ -7,6 +7,7 @@ import os
 import collections
 import time
 import math
+import random
 #import other modules as needed
 
 class Index:
@@ -20,6 +21,7 @@ class Index:
     def buildIndex(self):
         #function to read documents from collection, tokenize and build the index with tokens
         start = time.perf_counter()
+        ########################### Building our Index ###############################
         for docID, doc in enumerate(os.listdir(self.path), 1):
             with open(os.path.join(self.path, doc), 'r') as file_obj:
                 doc_string = file_obj.read().lower()
@@ -32,7 +34,7 @@ class Index:
                     self.index[term] = [0, (docID, 1, [pos])]
                 else:
                     for i in range(1,len(self.index[term])):
-                        curr_docID, _, positions, _ = self.index[term][i]
+                        curr_docID, _, positions = self.index[term][i]
                         if curr_docID == docID: # not the first time term appears in THIS document
                             positions.append(pos)
                             break
@@ -41,9 +43,34 @@ class Index:
         ################# Index Built, Now Insert IDF & Weighted TF ##################
         # N = len(self.documents)	| df_t = len(self.index[term]) - 1	| idf_t = log10(N/df_t)
         for term in self.index:
-            self.index[term][0] = round(math.log10((len(self.documents)) / (len(self.index[term]) - 1)), 4) # IDF
+            self.index[term][0] = round(math.log10((len(self.documents)) / (len(self.index[term]) - 1)), 4)     # IDF
             for i in range(1,len(self.index[term])):
-                self.index[term][i] = (self.index[term][i][0], 1 + math.log10(len(self.index[term][i][2])), self.index[term][i][2])
+                ############ Determine R #################
+                if (len(self.index[term]) - 1) <= 5:
+                    r = len(self.index[term])
+                else:
+                    r = (len(self.index[term]) // 2) + 1
+                ##########################################
+
+                ##################### Insert weighted tf into index ######################
+                w = 1 + math.log10(len(self.index[term][i][2]))
+                self.index[term][i] = (self.index[term][i][0], w, self.index[term][i][2]) # Insert weighted frequency
+                ##########################################################################
+
+                ##################### Champions List (for Method 2) #######################
+                if term not in self.champion:                                                    # Empty Champions List
+                    self.champion[term] = [(self.index[term][i][0], w)]
+                else:                                                                               # Existing Champions list
+                    for j in range(len(self.champion[term])):                                       # Iterate thru, comparing scores
+                        if self.champion[term][j][1] <= w:                                              # Insert, keeping list sorted
+                            self.champion[term].insert(j, (self.index[term][i][0], w))
+                            if len(self.champion[term]) >= r:                                           # Keeps length of list at r 
+                                _ = self.champion[term].pop()
+                            break
+                        elif j == (len(self.champion[term]) - 1) and len(self.champion[term]) <= r: # We have reached end of list and still under r
+                            self.champion[term].append((self.index[term][i][0], w))
+                            break
+                ###########################################################################
         end = time.perf_counter()
         print("Index built in {} seconds.".format(end-start))
 
@@ -119,35 +146,62 @@ class Index:
             vector_q[i] = (vector_q[i][0], vector_q[i][1] / norm_q)
         ############# Query vector is now normalized ##########################
 
-        if not len(self.documents[1][1]): # Only generates vectors once.
-            ################ Generating Doc Vectors For All Docs ##################
-            for term in self.index:
-                for i in range(1, len(self.index[term])):
-                        self.documents[self.index[term][i][0]][1].append((term, self.index[term][i][1]*self.index[term][0]))
-            #######################################################################
-            
-            ###################### Normalizing Doc Vectors ########################
-            ltwo_d = 0
-            for doc in self.documents:
-                for i in range(len(self.documents[doc][1])):
-                    ltwo_d += (self.documents[doc][1][i][1])**(2)
-                norm_d = math.sqrt(ltwo_d)
-                for i in range(len(self.documents[doc][1])):
-                    self.documents[doc][1][i] = (self.documents[doc][1][i][0], self.documents[doc][1][i][1] / norm_d)
-            #######################################################################
+        ############# Generating Doc Vectors For Champion Docs ################
+        count = 0
+        for term in q_list: # Iterate over query terms
+            if term in self.stop_list:
+                continue
+            for cdoc in range(len(self.champion[term])): # Iterate through champion documents
+                count += 1
+                # Want to check if document vector has this term already
+                if len(self.documents[self.champion[term][cdoc][0]][3]) == 0: # Vector is empty
+                    self.documents[self.champion[term][cdoc][0]][3].append((term, self.champion[term][cdoc][1]*self.index[term][0]))
+                else:
+                    for i in range(len(self.documents[self.champion[term][cdoc][0]][3])): # Iterate over doc vector
+                        if self.documents[self.champion[term][cdoc][0]][3][i][0] == term: # term already in vector
+                            break
+                        elif i == len(self.documents[self.champion[term][cdoc][0]][3]) - 1: # End of vector, term not in here
+                            self.documents[self.champion[term][cdoc][0]][3].append((term, self.champion[term][cdoc][1]*self.index[term][0]))
+        #######################################################################
+
+        ##################### If number of docs < k ###########################
+        while count < k:
+            for term in q_list: # Iterating through these terms so that the added docs are relevant
+                if term in self.stop_list:
+                        continue
+                for tup in range(1, len(self.index[term])): # Iterate thru posting list
+                    if not len(self.documents[self.index[term][tup][0]][3]):
+                        self.documents[self.index[term][tup][0]][3].append((term, self.index[term][tup][1]*self.index[term][0]))
+                        count += 1
+                    if count >= k:
+                        break
+        #######################################################################
+
+        ###################### Normalizing Doc Vectors ########################
+        ltwo_d = 0
+        for doc in self.documents:
+            for i in range(len(self.documents[doc][3])):
+                ltwo_d += (self.documents[doc][3][i][1])**(2)
+            norm_d = math.sqrt(ltwo_d)
+            for i in range(len(self.documents[doc][3])):
+                self.documents[doc][3][i] = (self.documents[doc][3][i][0], self.documents[doc][3][i][1] / norm_d)
+        #######################################################################
 
         ################## Calculate the Cosine Score #########################
         for doc in self.documents: # iterate over every document
+            if len(self.documents[doc][3]) == 0:
+                continue
             cos_score = 0
             for i in range(len(vector_q)): # iterate through query
-                for tup in range(len(self.documents[doc][1])): # iterate through document vector's elements
-                    if self.documents[doc][1][tup][0] == vector_q[i][0]:
-                        cos_score += self.documents[doc][1][tup][1]*vector_q[i][1]
+                for tup in range(len(self.documents[doc][3])): # iterate through document vector's elements
+                    if self.documents[doc][3][tup][0] == vector_q[i][0]:
+                        cos_score += self.documents[doc][3][tup][1]*vector_q[i][1]
                         break
-                    elif tup == len(self.documents[doc][1])-1:
+                    elif tup == len(self.documents[doc][3])-1:
                         break
             # Inserts doc/score, keeps rank order 
             for i in range(len(rank_list)):
+                #print(doc, cos_score)
                 if cos_score == 0:
                     rank_list.append((doc, cos_score))
                     break
@@ -183,7 +237,7 @@ class Index:
             vector_q[i] = (vector_q[i][0], vector_q[i][1] / norm_q)
         ############# Query vector is now normalized ##########################
 
-        if not len(self.documents[2][2]): # Only generates vectors once.
+        if not len(self.documents[1][2]): # Only generates vectors once.
             ################ Generating Doc Vectors For All Docs ##################
             for term in self.index:
                 for i in range(1, len(self.index[term])):
@@ -229,8 +283,10 @@ class Index:
 
     def inexact_query_cluster_pruning(self, query_terms, k):
         #function for exact top K retrieval using cluster pruning (method 4)
-        #Returns at the minimum the document names of the top K docIDs ordered in decreasing order of similarity score
-        pass
+        leaders = []
+        for i in range(int(math.sqrt(len(self.documents)))):
+            leaders.append(random.randint(1,len(self.documents)))
+        print(leaders)
 
     def print_dict(self):
         #function to print the terms and posting list in the index
@@ -240,12 +296,12 @@ class Index:
     def print_doc_list(self):
         # function to print the documents and their document id
         for docID, doc in self.documents.items():
-            print("Doc ID: {0}  ==> {1}".format(docID, doc))
+            print("Doc ID: {0}  ==> {1}".format(docID, doc[0]))
 
 if __name__ == '__main__':
     index = Index('collection')
     index.buildIndex()
-    index.exact_query('red china home', 5)
-    index.inexact_query_index_elimination('red china home', 5)
+    #index.exact_query('red china home', 5)
+    #index.inexact_query_index_elimination('red china home', 5)
     #index.inexact_query_champion('red china home', 5)
-    #index.inexact_query_cluster_pruning('red china home', 5)
+    index.inexact_query_cluster_pruning('red china home', 5)
