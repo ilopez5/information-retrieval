@@ -285,7 +285,7 @@ class Index:
     def inexact_query_cluster_pruning(self, query_terms, k):
         # function for exact top K retrieval using cluster pruning (method 4)
         start = time.perf_counter()
-        rank_list = [(0,0)]
+        rank_list = []
         ############### Generating Query Vector ###############################
         q_list = re.split(r"\W+", query_terms.lower())
         vector_q = [(term, self.index[term][0]) for term in q_list if term not in self.stop_list]
@@ -299,7 +299,6 @@ class Index:
         
         ############# Create Clusters! #################
         if len(self.group) == 0:
-
             ################## Generate Leaders ####################
             leaders = []
             for i in range(int(math.sqrt(len(self.documents)))):
@@ -324,28 +323,62 @@ class Index:
                     self.documents[doc][4][i] = (self.documents[doc][4][i][0], self.documents[doc][4][i][1] / norm_d)
             #######################################################################
 
-            ############# Calculate Cosine Scores ##################
+            ################## Pair Followers with Leaders ########################
             for doc in self.documents:                                # Iterate over all non-leader documents
                 if doc in leaders:
                     continue
-                cos_score = 0
                 my_lead = []
                 for lead in leaders:                                    # Iterate over all leaders
-                    for i in range(len(self.documents[doc][4])):            # Iterate over each element in doc vector
-                        for j in range(len(self.documents[lead][4])):            # Iterate over each element in leader vector
+                    cos_score = 0
+                    for i in range(len(self.documents[doc][4])):            # Iterate over doc vector
+                        for j in range(len(self.documents[lead][4])):            # Iterate over leader vector
                             if self.documents[doc][4][i][0] == self.documents[lead][4][j][0]:
                                 cos_score += self.documents[doc][4][i][1]*self.documents[lead][4][j][1]
                                 break
-                    # Have cosine score b/n doc and lead now
                     my_lead.append((lead, cos_score))
                 my_lead = sorted(my_lead, key=lambda tup: -tup[1])
-                #print(doc, my_lead)
-                self.group[my_lead[0][0]].append(doc)
+                for lead in my_lead:
+                    if len(self.group[lead[0]]) < len(self.documents) // len(self.group):
+                        self.group[lead[0]].append(doc)
+                        break
+        ############## Clusters have been created ##############
+        
+        order = []
+        for lead in self.group: # iterate over every leader
+            cos_score = 0
+            for q in range(len(vector_q)): # iterate through query vector
+                for tup in range(len(self.documents[lead][4])): # iterate through document vector's elements
+                    if self.documents[lead][4][tup][0] == vector_q[q][0]:
+                        cos_score += self.documents[doc][4][tup][1]*vector_q[q][1]
+                        break
+            order.append((lead, cos_score))
+        order = sorted(order, key=lambda tup: -tup[1])
+        rank_list.append(order[0])
 
-            ############## Clusters have been created ##############
+        doc_list = []
+        for key in self.group:
+            doc_list.append(key)
+            for tup in self.group[key]:
+                doc_list.append(self.group[key][tup][0])
+        
+        for doc in doc_list:
+            if rank_list[0] == order[0]:
+                continue
+            cos_score = 0
+            for term in range(len(vector_q)):
+                for tup in range(len(self.documents[doc][4])):
+                    if self.documents[doc][4][tup][0] == vector_q[term][0]:
+                        cos_score += self.documents[doc][4][tup][1]*vector_q[term][1]
+                        break
+            for i in range(len(rank_list)):
+                if cos_score == 0:
+                    rank_list.append((doc, cos_score))
+                    break
+                if rank_list[i][1] <= cos_score:
+                    rank_list.insert(i, (doc, cos_score))
+                    break
+
         end = time.perf_counter()
-        for lead in self.group:
-            print(lead, self.group[lead])
         print("That took {} seconds.".format(end-start))
 
 
