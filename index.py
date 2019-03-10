@@ -326,17 +326,13 @@ class Index:
 
             ############# Calculate Cosine Scores ##################
             for doc in self.documents:                                # Iterate over all non-leader documents
-                #print("doc")
                 if doc in leaders:
                     continue
                 cos_score = 0
                 my_lead = []
                 for lead in leaders:                                    # Iterate over all leaders
-                    #print("lead")
                     for i in range(len(self.documents[doc][4])):            # Iterate over each element in doc vector
-                        #print("i")
                         for j in range(len(self.documents[lead][4])):            # Iterate over each element in leader vector
-                            #print("j")
                             if self.documents[doc][4][i][0] == self.documents[lead][4][j][0]:
                                 cos_score += self.documents[doc][4][i][1]*self.documents[lead][4][j][1]
                                 break
