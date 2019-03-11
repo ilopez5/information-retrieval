@@ -382,6 +382,8 @@ class Index:
                         cos_score += self.documents[doc][4][tup][1]*vector_q[term][1]
                         break
             for i in range(len(rank_list)):
+                if rank_list[i][1] == doc:
+                    continue
                 if cos_score == 0:
                     rank_list.append((doc, cos_score))
                     break
