@@ -127,6 +127,7 @@ class Index:
         ###################### Ranked List Now Populated ######################
 
         ################### Print Top K & Performance Time ####################
+        print("Exact Top {}".format(k))
         for i in range(k):
             print(f"{self.documents[rank_list[i][0]][0]:<13}, Score: {round(rank_list[i][1], 6)}")
         end = time.perf_counter()
@@ -212,6 +213,7 @@ class Index:
         ###################### Ranked List Now Populated ######################
 
         ################### Print Top K & Performance Time ####################
+        print("Champs Top {}".format(k))        
         for i in range(k):
             print(f"{self.documents[rank_list[i][0]][0]:<13}, Score: {round(rank_list[i][1], 6)}")
         end = time.perf_counter()
@@ -221,7 +223,7 @@ class Index:
     def inexact_query_index_elimination(self, query_terms, k):
         #function for inexact top K retrieval using index elimination (method 3)
         start = time.perf_counter()
-        rank_list = [(0,0)]
+        rank_list = []
         ####################### Generating Query Vector #######################
         q_list = re.split(r"\W+", query_terms.lower())
         vector_q = sorted([(term, self.index[term][0]) for term in q_list if term not in self.stop_list], key=lambda tup: -tup[1])
@@ -266,16 +268,20 @@ class Index:
                     elif term == len(self.documents[doc][2])-1:
                         break
             # Inserts doc/score, keeps rank order
-            for i in range(len(rank_list)):
-                if cos_score == 0:
-                    rank_list.append((doc, cos_score))
-                    break
-                if rank_list[i][1] <= cos_score:
-                    rank_list.insert(i, (doc, cos_score))
-                    break
+            if len(rank_list) == 0:
+                rank_list.append((doc, cos_score))
+            else:
+                for i in range(len(rank_list)):
+                    if cos_score == 0:
+                        rank_list.append((doc, cos_score))
+                        break
+                    if rank_list[i][1] <= cos_score:
+                        rank_list.insert(i, (doc, cos_score))
+                        break
         ###################### Ranked List Now Populated ######################
 
         ################### Print Top K & Performance Time ####################
+        print("Index C. Top {}".format(k))        
         for i in range(k):
             print(f"{self.documents[rank_list[i][0]][0]:<13}, Score: {round(rank_list[i][1], 6)}")
         end = time.perf_counter()
@@ -324,16 +330,16 @@ class Index:
             #######################################################################
 
             ################## Pair Followers with Leaders ########################
-            for doc in self.documents:                                # Iterate over all non-leader documents
-                if doc in leaders:
+            for doc in self.documents: # Iterate over all non-leader documents
+                if doc in leaders: # ignore leaders, we are dealing with followers here
                     continue
                 my_lead = []
-                for lead in leaders:                                    # Iterate over all leaders
+                for lead in leaders: # Iterate over all leaders
                     cos_score = 0
-                    for i in range(len(self.documents[doc][4])):            # Iterate over doc vector
-                        for j in range(len(self.documents[lead][4])):            # Iterate over leader vector
-                            if self.documents[doc][4][i][0] == self.documents[lead][4][j][0]:
-                                cos_score += self.documents[doc][4][i][1]*self.documents[lead][4][j][1]
+                    for i in range(len(self.documents[doc][4])): # Iterate over doc vector
+                        for j in range(len(self.documents[lead][4])): # Iterate over leader vector
+                            if self.documents[doc][4][i][0] == self.documents[lead][4][j][0]: # If term == term
+                                cos_score += self.documents[doc][4][i][1]*self.documents[lead][4][j][1] # multiply them and add to total
                                 break
                     my_lead.append((lead, cos_score))
                 my_lead = sorted(my_lead, key=lambda tup: -tup[1])
@@ -350,24 +356,24 @@ class Index:
             for q in range(len(vector_q)): # iterate through query vector
                 for tup in range(len(self.documents[lead][4])): # iterate through document vector's elements
                     if self.documents[lead][4][tup][0] == vector_q[q][0]:
-                        cos_score += self.documents[doc][4][tup][1]*vector_q[q][1]
+                        cos_score += self.documents[lead][4][tup][1]*vector_q[q][1]
                         break
             order.append((lead, cos_score))
         order = sorted(order, key=lambda tup: -tup[1])
         rank_list.append(order[0])
-        ##################################################################
+        # ##################################################################
 
-        ############# List of Documents to Score (in order) ##############
+        # ############# List of Documents to Score (in order) ##############
         doc_list = []
-        for key in self.group:
-            doc_list.append(key)
-            for tup in self.group[key]:
-                doc_list.append(self.group[key][tup][0])
-        ##################################################################
-        
-        ##################### Populate Ranked List #######################
+        for lead in self.group:
+            doc_list.append(lead)
+            for doc in self.group[lead]:
+                doc_list.append(doc)
+        # ##################################################################
+
+        # ##################### Populate Ranked List #######################
         for doc in doc_list:
-            if rank_list[0] == order[0]:
+            if doc == rank_list[0][0]:
                 continue
             cos_score = 0
             for term in range(len(vector_q)):
@@ -382,9 +388,10 @@ class Index:
                 if rank_list[i][1] <= cos_score:
                     rank_list.insert(i, (doc, cos_score))
                     break
-        ##################################################################
+        # ##################################################################
 
-        ################### Print Top K & Performance Time ####################
+        # ################### Print Top K & Performance Time ####################
+        print("Cluster P. Top {}".format(k))        
         for i in range(k):
             print(f"{self.documents[rank_list[i][0]][0]:<13}, Score: {round(rank_list[i][1], 6)}")
         end = time.perf_counter()
@@ -404,7 +411,29 @@ class Index:
 if __name__ == '__main__':
     index = Index('collection')
     index.buildIndex()
-    #index.exact_query('red china home', 5)
-    #index.inexact_query_index_elimination('red china home', 5)
-    #index.inexact_query_champion('red china home', 5)
-    index.inexact_query_cluster_pruning('red china home', 5)
+    ########################################################
+    index.exact_query('red china home', 3)
+    index.inexact_query_index_elimination('red china home', 3)
+    index.inexact_query_champion('red china home', 3)
+    index.inexact_query_cluster_pruning('red china home', 3)
+    ########################################################
+    index.exact_query('foreign town location', 4)
+    index.inexact_query_index_elimination('foreign town location', 4)
+    index.inexact_query_champion('foreign town location', 4)
+    index.inexact_query_cluster_pruning('foreign town location', 4)
+    ########################################################
+    index.exact_query('band russian soviet', 5)
+    index.inexact_query_index_elimination('band russian soviet', 5)
+    index.inexact_query_champion('band russian soviet', 5)
+    index.inexact_query_cluster_pruning('band russian soviet', 5)
+    ########################################################
+    index.exact_query('democratic institutions lobbies', 6)
+    index.inexact_query_index_elimination('democratic institutions lobbies', 6)
+    index.inexact_query_champion('democratic institutions lobbies', 6)
+    index.inexact_query_cluster_pruning('democratic institutions lobbies', 6)
+    ########################################################
+    index.exact_query('government party political', 7)
+    index.inexact_query_index_elimination('government party political', 7)
+    index.inexact_query_champion('government party political', 7)
+    index.inexact_query_cluster_pruning('government party political', 7)
+    ########################################################
