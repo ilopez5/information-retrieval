@@ -10,6 +10,7 @@ class index:
 	def __init__(self,path):
 		self.path = path
 		self.index = {}
+		self.documents = {}
 		self.stop_list = ['a','an','and','are','as','at','be','by','for','from','has','he','in','is','it','its','of','on','that','the','to','was','were','will','with']
 
 	def buildIndex(self):
@@ -44,8 +45,7 @@ class index:
 		for term in self.index:
 			self.index[term][0] = round(math.log10((len(self.documents)) / (len(self.index[term]) - 1)), 4)	# IDF
 			for i in range(1,len(self.index[term])):
-				docID, w, positions = self.index[term][i]
-				w = 1 + math.log10(len(self.index[term][i][2]))
+				self.index[term][i] = (self.index[term][i][0], 1 + math.log10(len(self.index[term][i][2])), self.index[term][i][2])
 
 	def rocchio(self, query_terms, pos_feedback, neg_feedback, alpha, beta, gamma):
 	# function to implement rocchio algorithm
