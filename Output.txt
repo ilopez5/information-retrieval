@@ -1,0 +1,647 @@
+Index built in 20.654657419770956 seconds.
+Exact Top 1
+Text-382.txt , Score: 0.035012
+Results retrieved in 1.5770133342593908 seconds
+Index C. Top 1
+Text-382.txt , Score: 0.030968
+Results retrieved in 1.4583264328539371 seconds
+Champs Top 1
+Text-8.txt   , Score: 0.545425
+Results retrieved in 0.003231833688914776 seconds
+Exact Top 2
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Results retrieved in 0.451565258204937 seconds
+Index C. Top 2
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Results retrieved in 0.3331250408664346 seconds
+Champs Top 2
+Text-382.txt , Score: 0.438705
+Text-8.txt   , Score: 0.304452
+Results retrieved in 0.0032876720651984215 seconds
+Exact Top 3
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Results retrieved in 0.5664059221744537 seconds
+Index C. Top 3
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Results retrieved in 0.44317116495221853 seconds
+Champs Top 3
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.219353
+Text-8.txt   , Score: 0.213029
+Results retrieved in 0.015332061797380447 seconds
+Exact Top 4
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Results retrieved in 0.5769323594868183 seconds
+Index C. Top 4
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Results retrieved in 0.43878631945699453 seconds
+Champs Top 4
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.196195
+Text-8.txt   , Score: 0.165391
+Text-370.txt , Score: 0.129838
+Results retrieved in 0.0032975096255540848 seconds
+Exact Top 5
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Results retrieved in 0.5762939713895321 seconds
+Index C. Top 5
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Results retrieved in 0.42098824959248304 seconds
+Champs Top 5
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.179101
+Text-8.txt   , Score: 0.136182
+Text-370.txt , Score: 0.114423
+Text-384.txt , Score: 0.100324
+Results retrieved in 0.003298982046544552 seconds
+Exact Top 6
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Text-8.txt   , Score: 0.00743
+Results retrieved in 0.5934440055862069 seconds
+Index C. Top 6
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Text-411.txt , Score: 0.006005
+Results retrieved in 0.42630732897669077 seconds
+Champs Top 6
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.165815
+Text-8.txt   , Score: 0.116413
+Text-370.txt , Score: 0.102976
+Text-384.txt , Score: 0.085171
+Text-27.txt  , Score: 0.080864
+Results retrieved in 0.0033266209065914154 seconds
+Exact Top 7
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Results retrieved in 0.5888988822698593 seconds
+Index C. Top 7
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Text-411.txt , Score: 0.006005
+Text-279.txt , Score: 0.005422
+Results retrieved in 0.4387254323810339 seconds
+Champs Top 7
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.155106
+Text-8.txt   , Score: 0.102117
+Text-370.txt , Score: 0.094084
+Text-384.txt , Score: 0.074319
+Text-27.txt  , Score: 0.072856
+Text-273.txt , Score: 0.06752
+Results retrieved in 0.027310158126056194 seconds
+Exact Top 8
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Text-411.txt , Score: 0.00661
+Results retrieved in 0.5732032367959619 seconds
+Index C. Top 8
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Text-411.txt , Score: 0.006005
+Text-279.txt , Score: 0.005422
+Text-343.txt , Score: 0.004573
+Results retrieved in 0.4276502365246415 seconds
+Champs Top 8
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.146235
+Text-8.txt   , Score: 0.091275
+Text-370.txt , Score: 0.086944
+Text-27.txt  , Score: 0.066547
+Text-384.txt , Score: 0.066152
+Text-273.txt , Score: 0.06124
+Text-279.txt , Score: 0.047943
+Results retrieved in 0.027249508537352085 seconds
+Exact Top 9
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Text-411.txt , Score: 0.00661
+Text-304.txt , Score: 0.005303
+Results retrieved in 0.5467812661081553 seconds
+Index C. Top 9
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Text-411.txt , Score: 0.006005
+Text-279.txt , Score: 0.005422
+Text-343.txt , Score: 0.004573
+Text-304.txt , Score: 0.004504
+Results retrieved in 0.36872397642582655 seconds
+Champs Top 9
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.138731
+Text-8.txt   , Score: 0.082756
+Text-370.txt , Score: 0.081062
+Text-27.txt  , Score: 0.061434
+Text-384.txt , Score: 0.059774
+Text-273.txt , Score: 0.056199
+Text-279.txt , Score: 0.043777
+Text-411.txt , Score: 0.039801
+Results retrieved in 0.003084995783865452 seconds
+Exact Top 10
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Text-411.txt , Score: 0.00661
+Text-304.txt , Score: 0.005303
+Text-156.txt , Score: 0.005041
+Results retrieved in 0.5101737212389708 seconds
+Index C. Top 10
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Text-411.txt , Score: 0.006005
+Text-279.txt , Score: 0.005422
+Text-343.txt , Score: 0.004573
+Text-304.txt , Score: 0.004504
+Text-324.txt , Score: 0.004343
+Results retrieved in 0.2640911238268018 seconds
+Champs Top 10
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.132275
+Text-370.txt , Score: 0.076117
+Text-8.txt   , Score: 0.075873
+Text-27.txt  , Score: 0.057194
+Text-384.txt , Score: 0.054647
+Text-273.txt , Score: 0.052055
+Text-279.txt , Score: 0.040377
+Text-411.txt , Score: 0.036261
+Text-255.txt , Score: 0.032872
+Results retrieved in 0.003088810481131077 seconds
+Index built in 16.106240496970713 seconds.
+Exact Top 1
+Text-382.txt , Score: 0.035012
+Results retrieved in 1.016060683876276 seconds
+Index C. Top 1
+Text-382.txt , Score: 0.030968
+Results retrieved in 0.6879583690315485 seconds
+Champs Top 1
+Text-8.txt   , Score: 0.545425
+Results retrieved in 0.0018150284886360168 seconds
+Cluster P. Top 1
+Text-27.txt  , Score: 0.004453
+Results retrieved in 543.9708786243573 seconds
+Exact Top 2
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Results retrieved in 0.4042879790067673 seconds
+Index C. Top 2
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Results retrieved in 0.23123139794915915 seconds
+Champs Top 2
+Text-382.txt , Score: 0.438705
+Text-8.txt   , Score: 0.304452
+Results retrieved in 0.0019152723252773285 seconds
+Cluster P. Top 2
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Results retrieved in 0.033320032991468906 seconds
+Exact Top 3
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Results retrieved in 0.3253105543553829 seconds
+Index C. Top 3
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Results retrieved in 0.21689906623214483 seconds
+Champs Top 3
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.219353
+Text-8.txt   , Score: 0.213029
+Results retrieved in 0.0017924215644598007 seconds
+Cluster P. Top 3
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-384.txt , Score: 0.008592
+Results retrieved in 0.03291536308825016 seconds
+Exact Top 4
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Results retrieved in 0.2938902797177434 seconds
+Index C. Top 4
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Results retrieved in 0.1978318551555276 seconds
+Champs Top 4
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.196195
+Text-8.txt   , Score: 0.165391
+Text-370.txt , Score: 0.129838
+Results retrieved in 0.0018123351037502289 seconds
+Cluster P. Top 4
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-384.txt , Score: 0.008592
+Text-8.txt   , Score: 0.00743
+Results retrieved in 0.009254214353859425 seconds
+Exact Top 5
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Results retrieved in 0.20607939828187227 seconds
+Index C. Top 5
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Results retrieved in 0.1574919382110238 seconds
+Champs Top 5
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.179101
+Text-8.txt   , Score: 0.136182
+Text-370.txt , Score: 0.114423
+Text-384.txt , Score: 0.100324
+Results retrieved in 0.0018111234530806541 seconds
+Cluster P. Top 5
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-384.txt , Score: 0.008592
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Results retrieved in 0.0091781597584486 seconds
+Exact Top 6
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Text-8.txt   , Score: 0.00743
+Results retrieved in 0.21297999937087297 seconds
+Index C. Top 6
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Text-411.txt , Score: 0.006005
+Results retrieved in 0.14150403905659914 seconds
+Champs Top 6
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.165815
+Text-8.txt   , Score: 0.116413
+Text-370.txt , Score: 0.102976
+Text-384.txt , Score: 0.085171
+Text-27.txt  , Score: 0.080864
+Results retrieved in 0.001801283098757267 seconds
+Cluster P. Top 6
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-384.txt , Score: 0.008592
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Text-27.txt  , Score: 0.004453
+Results retrieved in 0.044854563660919666 seconds
+Exact Top 7
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Results retrieved in 0.305546997115016 seconds
+Index C. Top 7
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Text-411.txt , Score: 0.006005
+Text-279.txt , Score: 0.005422
+Results retrieved in 0.20728393085300922 seconds
+Champs Top 7
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.155106
+Text-8.txt   , Score: 0.102117
+Text-370.txt , Score: 0.094084
+Text-384.txt , Score: 0.074319
+Text-27.txt  , Score: 0.072856
+Text-273.txt , Score: 0.06752
+Results retrieved in 0.0018443567678332329 seconds
+Cluster P. Top 7
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-384.txt , Score: 0.008592
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Text-27.txt  , Score: 0.004453
+Text-378.txt , Score: 0.004366
+Results retrieved in 0.04527122899889946 seconds
+Exact Top 8
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Text-411.txt , Score: 0.00661
+Results retrieved in 0.2941567385569215 seconds
+Index C. Top 8
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Text-411.txt , Score: 0.006005
+Text-279.txt , Score: 0.005422
+Text-343.txt , Score: 0.004573
+Results retrieved in 0.21748344413936138 seconds
+Champs Top 8
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.146235
+Text-8.txt   , Score: 0.091275
+Text-370.txt , Score: 0.086944
+Text-27.txt  , Score: 0.066547
+Text-384.txt , Score: 0.066152
+Text-273.txt , Score: 0.06124
+Text-279.txt , Score: 0.047943
+Results retrieved in 0.013850315473973751 seconds
+Cluster P. Top 8
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-384.txt , Score: 0.008592
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Text-27.txt  , Score: 0.004453
+Text-378.txt , Score: 0.004366
+Text-271.txt , Score: 0.004045
+Results retrieved in 0.009244563989341259 seconds
+Exact Top 9
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Text-411.txt , Score: 0.00661
+Text-304.txt , Score: 0.005303
+Results retrieved in 0.3291509309783578 seconds
+Index C. Top 9
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Text-411.txt , Score: 0.006005
+Text-279.txt , Score: 0.005422
+Text-343.txt , Score: 0.004573
+Text-304.txt , Score: 0.004504
+Results retrieved in 0.2034599743783474 seconds
+Champs Top 9
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.138731
+Text-8.txt   , Score: 0.082756
+Text-370.txt , Score: 0.081062
+Text-27.txt  , Score: 0.061434
+Text-384.txt , Score: 0.059774
+Text-273.txt , Score: 0.056199
+Text-279.txt , Score: 0.043777
+Text-411.txt , Score: 0.039801
+Results retrieved in 0.02583417948335409 seconds
+Cluster P. Top 9
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-384.txt , Score: 0.008592
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Text-27.txt  , Score: 0.004453
+Text-378.txt , Score: 0.004366
+Text-271.txt , Score: 0.004045
+Text-297.txt , Score: 0.003403
+Results retrieved in 0.020958599634468555 seconds
+Exact Top 10
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-334.txt , Score: 0.009194
+Text-384.txt , Score: 0.008592
+Text-33.txt  , Score: 0.008379
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Text-411.txt , Score: 0.00661
+Text-304.txt , Score: 0.005303
+Text-156.txt , Score: 0.005041
+Results retrieved in 0.3336124774068594 seconds
+Index C. Top 10
+Text-382.txt , Score: 0.030968
+Text-384.txt , Score: 0.007588
+Text-334.txt , Score: 0.007543
+Text-33.txt  , Score: 0.007529
+Text-8.txt   , Score: 0.006189
+Text-411.txt , Score: 0.006005
+Text-279.txt , Score: 0.005422
+Text-343.txt , Score: 0.004573
+Text-304.txt , Score: 0.004504
+Text-324.txt , Score: 0.004343
+Results retrieved in 0.2167769530788064 seconds
+Champs Top 10
+Text-382.txt , Score: 0.438705
+Text-349.txt , Score: 0.132275
+Text-370.txt , Score: 0.076117
+Text-8.txt   , Score: 0.075873
+Text-27.txt  , Score: 0.057194
+Text-384.txt , Score: 0.054647
+Text-273.txt , Score: 0.052055
+Text-279.txt , Score: 0.040377
+Text-411.txt , Score: 0.036261
+Text-255.txt , Score: 0.032872
+Results retrieved in 0.0018906518816947937 seconds
+Cluster P. Top 10
+Text-382.txt , Score: 0.035012
+Text-397.txt , Score: 0.010029
+Text-384.txt , Score: 0.008592
+Text-8.txt   , Score: 0.00743
+Text-279.txt , Score: 0.007412
+Text-27.txt  , Score: 0.004453
+Text-378.txt , Score: 0.004366
+Text-271.txt , Score: 0.004045
+Text-297.txt , Score: 0.003403
+Text-189.txt , Score: 0.002746
+Results retrieved in 0.033488571643829346 seconds
+Exact Top 4
+Text-188.txt , Score: 0.011633
+Text-349.txt , Score: 0.007205
+Text-239.txt , Score: 0.004771
+Text-382.txt , Score: 0.004291
+Results retrieved in 0.34722818806767464 seconds
+Index C. Top 4
+Text-188.txt , Score: 0.011949
+Text-349.txt , Score: 0.007401
+Text-239.txt , Score: 0.004901
+Text-299.txt , Score: 0.003559
+Results retrieved in 0.2839480750262737 seconds
+Champs Top 4
+Text-188.txt , Score: 0.510109
+Text-349.txt , Score: 0.343675
+Text-239.txt , Score: 0.322276
+Text-299.txt , Score: 0.228674
+Results retrieved in 0.0017486093565821648 seconds
+Cluster P. Top 4
+Text-188.txt , Score: 0.011633
+Text-382.txt , Score: 0.004291
+Text-27.txt  , Score: 0.004219
+Text-196.txt , Score: 0.003361
+Results retrieved in 0.04625279642641544 seconds
+Exact Top 5
+Text-271.txt , Score: 0.008768
+Text-399.txt , Score: 0.007035
+Text-230.txt , Score: 0.005776
+Text-297.txt , Score: 0.005332
+Text-78.txt  , Score: 0.004957
+Results retrieved in 0.3581719482317567 seconds
+Index C. Top 5
+Text-230.txt , Score: 0.006201
+Text-271.txt , Score: 0.005978
+Text-399.txt , Score: 0.005014
+Text-166.txt , Score: 0.004592
+Text-186.txt , Score: 0.004158
+Results retrieved in 0.2783115357160568 seconds
+Champs Top 5
+Text-399.txt , Score: 0.33589
+Text-297.txt , Score: 0.322271
+Text-47.txt  , Score: 0.279238
+Text-378.txt , Score: 0.27142
+Text-416.txt , Score: 0.255913
+Results retrieved in 0.0018772156909108162 seconds
+Cluster P. Top 5
+Text-186.txt , Score: 0.004682
+Text-47.txt  , Score: 0.004349
+Text-227.txt , Score: 0.002602
+Text-261.txt , Score: 0.001411
+Text-68.txt  , Score: 0.000952
+Results retrieved in 0.006253021769225597 seconds
+Exact Top 6
+Text-40.txt  , Score: 0.031749
+Text-271.txt , Score: 0.022374
+Text-370.txt , Score: 0.013584
+Text-189.txt , Score: 0.00479
+Text-32.txt  , Score: 0.004208
+Text-225.txt , Score: 0.002655
+Results retrieved in 0.3968887059018016 seconds
+Index C. Top 6
+Text-40.txt  , Score: 0.029878
+Text-271.txt , Score: 0.023775
+Text-370.txt , Score: 0.011108
+Text-32.txt  , Score: 0.004471
+Text-225.txt , Score: 0.002821
+Text-382.txt , Score: 0
+Results retrieved in 0.2901504095643759 seconds
+Champs Top 6
+Text-40.txt  , Score: 0.718437
+Text-271.txt , Score: 0.652062
+Text-370.txt , Score: 0.276872
+Text-32.txt  , Score: 0.242326
+Text-225.txt , Score: 0.187316
+Text-173.txt , Score: 0.101941
+Results retrieved in 0.001748845912516117 seconds
+Cluster P. Top 6
+Text-225.txt , Score: 0.002655
+Text-53.txt  , Score: 0.002077
+Text-86.txt  , Score: 0.000816
+Text-252.txt , Score: 0.00081
+Text-209.txt , Score: 0
+Text-44.txt  , Score: 0
+Results retrieved in 0.03142243344336748 seconds
+Exact Top 7
+Text-382.txt , Score: 0.016239
+Text-271.txt , Score: 0.012913
+Text-301.txt , Score: 0.008201
+Text-397.txt , Score: 0.007316
+Text-189.txt , Score: 0.007315
+Text-255.txt , Score: 0.006466
+Text-334.txt , Score: 0.006143
+Results retrieved in 0.23745558969676495 seconds
+Index C. Top 7
+Text-382.txt , Score: 0.017333
+Text-301.txt , Score: 0.007907
+Text-255.txt , Score: 0.005941
+Text-141.txt , Score: 0.00565
+Text-370.txt , Score: 0.004933
+Text-20.txt  , Score: 0.004798
+Text-156.txt , Score: 0.004722
+Results retrieved in 0.1799747245386243 seconds
+Champs Top 7
+Text-255.txt , Score: 0.372641
+Text-271.txt , Score: 0.362708
+Text-156.txt , Score: 0.350294
+Text-88.txt  , Score: 0.337829
+Text-121.txt , Score: 0.30882
+Text-370.txt , Score: 0.29833
+Text-189.txt , Score: 0.258817
+Results retrieved in 0.0038251150399446487 seconds
+Cluster P. Top 7
+Text-114.txt , Score: 0.003313
+Text-261.txt , Score: 0.002558
+Text-71.txt  , Score: 0.002073
+Text-225.txt , Score: 0.001844
+Text-266.txt , Score: 0.001722
+Text-168.txt , Score: 0.001624
+Text-47.txt  , Score: 0.001208
+Results retrieved in 0.028468436561524868 seconds
