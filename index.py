@@ -13,7 +13,7 @@ class Index:
 		self.docmap = {}						 # docID: [doc#, len(doc)]
 		with open(stop_name) as f:
 			self.stop = f.read().lower().split() # ['a', 'about', 'above', ...]
-		self.rocchio = 0
+		self.r_counter = 0
 		
 	def buildIndex(self):
 		# function to read documents from collection, tokenize and build the 
@@ -66,56 +66,70 @@ class Index:
 			self.index[term][0] = round(m.log10(N/dft), 8)	# Insert rounded IDF
 		end = time.perf_counter()
 		print("TF-IDF Index built in {} seconds.".format(end-start))
-		return
 
-	
-	def rocchio(self, query_terms):
-		# function to implement rocchio algorithm
-		# Return the new query  terms and their weights
-		start = time.perf_counter()
-		beta, gamma = .75, .15								# Parameters given
-		Done = False
-		self.rocchio += 1									# Tracks iteration
-		query = self.calc_query(query_terms)
-		while not Done:
-			print("=== Rocchio Algorithm ===\nIteration:",self.counter)
-			pos_fb = input("Enter relevant document ids separated by space:").split()
-			neg_fb = input("Enter non-relevant document ids separated by soace:").split()
-			pos_fb, neg_fb = self.string_to_int(pos_fb, neg_fb)
-			rel_doc, nrel_doc = self.create_doc_vectors(pos_fb, neg_fb, beta, gamma)
-			new_query = self.add_vectors(query, self.add_vectors(rel_doc, nrel_doc))
-			# we have new query now
-			
 
-	def query(self, query_terms, k):
+	def query(self, query_terms, k=10):
 		# function for exact top K retrieval using cosine similarity
 		# Returns at the minimum the document names of the top K documents ordered 
-		# in decreasing order of similarity score
+		# in decreasing order o\f similarity score
 		start = time.perf_counter()
-		print("Query to search:", query_terms)
+		print("Query to search: \'{}\'".format(query_terms))
 		print("Number of (top) results: {}\n".format(k))
 		query, query_length = self.calc_tfidf_query(query_terms) # Calc tfidf for query
-		results = self.cosine_score(query, query_length)		 # Calc cosine score
+		results = self.cosine(query, query_length)				 # Calc cosine score
 		end = time.perf_counter()
-		print("Top {0} result(s) for the query {1} are:\n".format(k, query_terms))
+		print("Top {0} result(s) for the query \'{1}\' are:\n".format(k, query_terms))
 		print(f"Doc id:  Doc Name:     Score:")
 		for count, (doc_id, score) in enumerate(results, 0):
 			if count == k:
 				break
 			print(f"{doc_id:<8} TEXT {self.docmap[doc_id][0]}.txt, {score}")	
 		print("\nResults found in {} seconds.\n".format(end-start))
+		return self.rocchio(query_terms, k)
 
-	def print_dict(self):
-		# function to print the terms and posting list in the index
-		for term, post_list in self.index.items():
-			print(term,':', post_list)
+	
+	def rocchio(self, query_terms, k):
+		# function to implement rocchio algorithm
+		# Return the new query  terms and their weights
+		beta, gamma = .75, .15								# Parameters given
+		query = self.r_calc_query(query_terms)
+		while True:
+			self.r_counter += 1								# Tracks iteration
+			print("=== Rocchio Algorithm ===\n\nIteration:",self.r_counter)
+			pos_fb = input("Enter relevant document ids separated by space: ").split()
+			neg_fb = input("Enter non-relevant document ids separated by space: ").split()
+			start = time.perf_counter()
+			pos_fb, neg_fb = self.r_str_to_int(pos_fb, neg_fb)
+			rel_doc, nrel_doc = self.create_doc_vectors(pos_fb, neg_fb, beta, gamma)
+			new_query = self.r_add_vectors(query, self.r_add_vectors(rel_doc, nrel_doc))
+			end = time.perf_counter()
+			print("New query computed in {} seconds.".format(end-start))
+			print("New query terms with weights:\n{}".format(10)) # REPLACE 10 with new_query
+			stop = input("\nContinue with new query (y/n): ")
+			if stop == 'n':
+				break
+			else:
+				query, query_length = self.r_getlength(new_query)
+				self.rocchio_query(query, query_length, k)
+		return
 
-	def print_doc_list(self):
-		# function to print the documents and their document id
-		for docID, doc in self.docmap.items():
-			print("Doc ID: {0}	==> {1}".format(docID, doc[0]))
 
-	def cosine_score(self, query, query_length):
+	def rocchio_query(self, query, query_length, k):
+		# Will be similar to query() but geared towards modified query vector
+		start = time.perf_counter()
+		results = self.cosine(query, query_length)
+		end = time.perf_counter()
+		print("Top {0} result(s) for the modified query are:\m".format(k))
+		print("Doc id:  Doc Name:	  Score:")
+		for count, (docid, score) in enumerate(results, 0):
+			if count == k:
+				break
+			print(f"{docid:<8} TEXT {self.docmap[docid][0]}.txt, {score}")
+		print("\nResults found in {} seconds.\n".format(end-start))
+		return
+
+	# DEBUGGING: ISSUE LIES BELOW
+	def cosine(self, query, query_length):
 		# Calculate the cosine similarity score of any two vectors passed in
 		scores = c.defaultdict(int)										# Store rank list
 		doc_tfidf = c.defaultdict(float)								# Store doc tfidf
@@ -137,33 +151,42 @@ class Index:
 			scores[doc_id] /= denom										# Normalize
 		return sorted(scores.items(), key=lambda x: x[1], reverse=True) # Return sorted list
 
-	def create_doc_vector(self, r_docs, nr_docs, beta, gamma):
-		b_dr = beta / len(pos_fb)
-		g_dnr = gamma / len(neg_fb)
+
+	def create_doc_vectors(self, r_docs, nr_docs, beta, gamma):
+		# Create document vectors for documents that matter
+		b_dr = beta / len(r_docs)					# B/Dr coefficient
+		g_dnr = gamma / len(nr_docs)				# G/Dnr coefficient
 		rel_vect = c.defaultdict(float)				# Relevant doc vector
-		nrel_vect = c.defaultdict(float)			# Non relevant doc vector
+		nrel_vect = c.defaultdict(float)			# Non-relevant doc vector
 		
 		nrsum, rsum = 0, 0
 		for term in self.index:						# Iterate -> all terms
 			for item in self.index[term][1:]:		# Iterate -> post list
 				pos, docID = item[2], item[0]
 				if docID in r_docs:					# Curr doc in D_r
-					rsum += len(pos)
+					rsum += len(pos)				# Add raw frequency
 				elif docID in nr_docs:				# Curr doc in D_nr
-					nrsum += len(pos)
+					nrsum += len(pos)				# Add raw frequency
 			if rsum:								# Term => new query
 				rel_vect[term] = rsum				# Add raw freq
 				if nrsum:
 					nrel_vect[term] = nrsum
 			elif nrsum:
 				nrel_vect[term] = nrsum
-		# Scaling with Beta and Gamma values
+		# Scaling with Beta and Gamma coefficients
 		for term, freq in rel_vect.items():
 			rel_vect[term] = freq * b_dr
 		for term, freq in nrel_vect.items():
 			nrel_vect[term] = freq * g_dnr
-
 		return rel_vect, nrel_vect
+
+
+	def r_getlength(self, query):
+		# Used to get length of modified vector
+		query_length = 0
+		for term, val in query.items():
+			query_length += m.pow(val, 2)
+		return query, query_length
 
 
 	def calc_tfidf_query(self, query_terms):
@@ -183,19 +206,18 @@ class Index:
 				query[term] = 1
 				continue
 			query[term] += 1
-
 		# Calculate tf-idf for query terms
 		for term, freq in query.items():
 			idf = self.index[term][0]
 			wtf = 1 + m.log10(freq)
 			query[term] = wtf*idf
 			query_length += m.pow((wtf*idf), 2)
-
 		# Length of query terms
 		query_length = m.sqrt(query_length)
 		return query, query_length
 
-	def calc_query(self, query_terms):
+
+	def r_calc_query(self, query_terms):
 		# Calculates a simple query vector (e.g. [1,1,2]
 		query = c.defaultdict(int)
 		tokens = re.split('\W+', query_terms.lower())
@@ -210,10 +232,10 @@ class Index:
 				query[term] = 1
 		return query
 
-	def add_vectors(self, v_one, v_two):
+
+	def r_add_vectors(self, v_one, v_two):
 		# This method will be used to sum vectors
 		new_query = c.defaultdict(float)
-		
 		for term,val in v_one.items():
 			if term not in v_two:
 				new_query[term] = val
@@ -226,7 +248,8 @@ class Index:
 				new_query[term] = val
 		return new_query
 
-	def string_to_int(self, pos, neg):
+
+	def r_str_to_int(self, pos, neg):
 		# Converts user feedback into integers
 		for i in range(len(pos)):
 			pos[i] = eval(pos[i])
@@ -235,8 +258,20 @@ class Index:
 		return pos, neg
 
 
+	def print_dict(self):
+		# function to print the terms and posting list in the index
+		for term, post_list in self.index.items():
+			print(term,':', post_list)
+
+
+	def print_doc_list(self):
+		# function to print the documents and their document id
+		for docID, doc in self.docmap.items():
+			print("Doc ID: {0}	==> {1}".format(docID, doc[0]))
+
+
+
 if __name__ == '__main__':
 	x = Index('TIME.ALL', 'TIME.STP')
 	x.buildIndex()
-	x.query('red china home', 10)
-#	x.rocchio('red china home')	
+	x.query(' BACKGROUND OF THE NEW CHANCELLOR OF WEST GERMANY, LUDWIG ERHARD . ', 10)
