@@ -11,9 +11,9 @@ class Index:
 		self.path = path
 		self.index = {}							 # term: [idf, (docID, wtf, [positions]), ...)
 		self.docmap = {}						 # docID: [doc#, len(doc)]
+		self.doc_length = c.defaultdict(int)	 # docID: L2
 		with open(stop_name) as f:
 			self.stop = f.read().lower().split() # ['a', 'about', 'above', ...]
-		self.r_counter = 0
 		
 	def buildIndex(self):
 		# function to read documents from collection, tokenize and build the 
@@ -24,19 +24,16 @@ class Index:
 		with open(self.path, 'r') as f:						# Opens file
 			file = re.sub('\*text', 'DELIM', f.read().lower()) # Save into string
 		tokens = list(filter(None, re.split(r"\W+", file)))	# Tokenize string
-
-		docID = 0
+		docID = -1
 		for term in tokens:									# Iterate thru tokens
-			if term == "DELIM":								# First doc or new doc
-				if docID >= 1:								# End of Doc
-					self.docmap[docID].append(pos)			# Last pos = Length
-				isdoc = True								# For docID:doc# mapping
-				docID += 1
+			if term == "DELIM":								# New doc
+				newdoc = True								# Next term = doc name
+				docID += 1									# Increment docID
 				pos = 1										# Set/Reset position
 				continue
-			elif isdoc:										# Map docID:doc#
-				self.docmap[docID] = [term]					# Create mapping
-				isdoc = False								# Only do ^ once
+			elif newdoc:									# Map docID:doc#
+				self.docmap[docID] = term					# Create mapping
+				newdoc = False								# Only do ^ once
 				nottext = 0									# Counter to skip header
 				continue
 			elif nottext < 3:								# Skip header info
@@ -60,10 +57,18 @@ class Index:
 				else:										# First appearance in doc
 					self.index[term].append((docID,1,[pos])) # Create a tuple
 					pos += 1
-		for term in self.index:								# Goal: Insert IDF
+
+		for term,post in self.index.items():				# Goal: Insert IDF & Doc len
 			N = len(self.docmap)							# Length of Collection
-			dft = len(self.index[term]) - 1					# Length of Post List
-			self.index[term][0] = round(m.log10(N/dft), 8)	# Insert rounded IDF
+			dft = len(self.index[term])-1					# Length of Post List
+			idf = m.log10(N/dft)
+			post[0] = idf									# Insert rounded IDF
+			for item in post[1:]:							# Iterate posting list
+				docID, wtf, pos = item
+				self.doc_length[docID] += m.pow((idf*wtf), 2)
+		for docID,value in self.doc_length.items():
+			self.doc_length[docID] = m.sqrt(value)
+				
 		end = time.perf_counter()
 		print("TF-IDF Index built in {} seconds.".format(end-start))
 
@@ -80,37 +85,37 @@ class Index:
 		end = time.perf_counter()
 		print("Top {0} result(s) for the query \'{1}\' are:\n".format(k, query_terms))
 		print(f"Doc id:  Doc Name:     Score:")
-		for count, (doc_id, score) in enumerate(results, 0):
+		for count, (docID, score) in enumerate(results, 0):
 			if count == k:
 				break
-			print(f"{doc_id:<8} TEXT {self.docmap[doc_id][0]}.txt, {score}")	
+			print(f"{docID:<8} TEXT {self.docmap[docID]}.txt, {score}")	
 		print("\nResults found in {} seconds.\n".format(end-start))
-		return self.rocchio(query_terms, k)
+		return self.rocchio(query_terms, k)						# Immediately do Rocchio
 
 	
 	def rocchio(self, query_terms, k):
 		# function to implement rocchio algorithm
-		# Return the new query  terms and their weights
-		beta, gamma = .75, .15								# Parameters given
-		query = self.r_calc_query(query_terms)
+		# Return the new query terms and their weights
+		rcount, beta, gamma = 0, .75, .15								# Parameters given
+		query = self.calc_rquery(query_terms)							# Create query vector
 		while True:
-			self.r_counter += 1								# Tracks iteration
-			print("=== Rocchio Algorithm ===\n\nIteration:",self.r_counter)
+			rcount += 1													# Tracks iteration
+			print("=== Rocchio Algorithm ===\n\nIteration:",rcount)
 			pos_fb = input("Enter relevant document ids separated by space: ").split()
 			neg_fb = input("Enter non-relevant document ids separated by space: ").split()
 			start = time.perf_counter()
-			pos_fb, neg_fb = self.r_str_to_int(pos_fb, neg_fb)
-			rel_doc, nrel_doc = self.create_doc_vectors(pos_fb, neg_fb, beta, gamma)
-			new_query = self.r_add_vectors(query, self.r_add_vectors(rel_doc, nrel_doc))
+			pos_fb, neg_fb = self.str_to_int(pos_fb, neg_fb)			# Str => Ints
+			rel_doc, nrel_doc = self.create_drdnr_vectors(pos_fb, neg_fb, beta, gamma)
+			new_query = self.add_vectors(query, self.add_vectors(rel_doc, nrel_doc))
 			end = time.perf_counter()
 			print("New query computed in {} seconds.".format(end-start))
-			print("New query terms with weights:\n{}".format(10)) # REPLACE 10 with new_query
-			stop = input("\nContinue with new query (y/n): ")
+			print("New query terms with weights:\n{}\n\n".format(new_query.items()))
+			stop = input("Continue with new query (y/n): ")
 			if stop == 'n':
 				break
 			else:
-				query, query_length = self.r_getlength(new_query)
-				self.rocchio_query(query, query_length, k)
+				query_length = self.getlength(new_query)
+				self.rocchio_query(new_query, query_length, k)
 		return
 
 
@@ -119,50 +124,61 @@ class Index:
 		start = time.perf_counter()
 		results = self.cosine(query, query_length)
 		end = time.perf_counter()
-		print("Top {0} result(s) for the modified query are:\m".format(k))
+		print("\nTop {0} result(s) for the modified query are:\n".format(k))
 		print("Doc id:  Doc Name:	  Score:")
 		for count, (docid, score) in enumerate(results, 0):
 			if count == k:
 				break
-			print(f"{docid:<8} TEXT {self.docmap[docid][0]}.txt, {score}")
+			print(f"{docid:<8} TEXT {self.docmap[docid]}.txt, {score}")
 		print("\nResults found in {} seconds.\n".format(end-start))
 		return
 
-	# DEBUGGING: ISSUE LIES BELOW
+
 	def cosine(self, query, query_length):
 		# Calculate the cosine similarity score of any two vectors passed in
-		scores = c.defaultdict(int)										# Store rank list
+		scores = c.defaultdict(float)									# Store rank list
 		doc_tfidf = c.defaultdict(float)								# Store doc tfidf
 
 		# Calculate numerator per doc
-		for query_term, query_tfidf in query.items():
-			doc_idf = self.index[query_term][0]							# Store IDF
-			for item in self.index[query_term][1:]:
-				doc_id = item[0]										# docID
-				doc_wtf = item[1]										# wtf
-				doc_tfidf[doc_id] = doc_idf*doc_wtf						# Calculate tfidf
-				scores[doc_id] += query_tfidf * doc_tfidf[doc_id]		# Multiply tfidfs
+		for qterm, q_tfidf in query.items():							# Iterate qry terms
+			idf = self.index[qterm][0]									# Store IDF
+			for item in self.index[qterm][1:]:							# Iterate post list
+				docID = item[0]											# docID
+				wtf = item[1]											# wtf
+				doc_tfidf[docID] = idf * wtf							# Calculate tfidf
+				scores[docID] += q_tfidf * doc_tfidf[docID]				# Multiply tfidfs
 		# Calculate denominator per doc
-		for doc_id in scores:
-			denom = self.docmap[doc_id][1] * query_length				# Multiply lengths
-			if not denom:
-				scores[doc_id] = 0										# No Div by Zero
-				continue
-			scores[doc_id] /= denom										# Normalize
+		for docID in scores:
+			denom = self.doc_length[docID] * query_length				# Multiply L2's
+			if denom:
+				scores[docID] /= denom										# Normalize
 		return sorted(scores.items(), key=lambda x: x[1], reverse=True) # Return sorted list
 
 
-	def create_doc_vectors(self, r_docs, nr_docs, beta, gamma):
-		# Create document vectors for documents that matter
-		b_dr = beta / len(r_docs)					# B/Dr coefficient
-		g_dnr = gamma / len(nr_docs)				# G/Dnr coefficient
+	def create_drdnr_vectors(self, r_docs, nr_docs, beta, gamma):
+		# Create document vectors for relevant/nonrelevant documents
+		#if r_docs==[] and nr_docs==[]:
+		#	self.pseudo()
 		rel_vect = c.defaultdict(float)				# Relevant doc vector
 		nrel_vect = c.defaultdict(float)			# Non-relevant doc vector
-		
-		nrsum, rsum = 0, 0
+
+		if r_docs==[]:								# This if/else chain
+			b_dr = beta								# avoids div by zero
+			if nr_docs==[]:							# errors
+				g_dnr = gamma
+			else:
+				g_dnr = gamma / len(nr_docs)
+		elif nr_docs==[]:
+			b_dr = beta / len(r_docs)
+			g_dnr = gamma
+		else:
+			b_dr = beta / len(r_docs)				# B/Dr coefficient
+			g_dnr = gamma / len(nr_docs)			# G/Dnr coefficient
+
 		for term in self.index:						# Iterate -> all terms
+			nrsum, rsum = 0, 0
 			for item in self.index[term][1:]:		# Iterate -> post list
-				pos, docID = item[2], item[0]
+				docID, pos = item[0], item[2]
 				if docID in r_docs:					# Curr doc in D_r
 					rsum += len(pos)				# Add raw frequency
 				elif docID in nr_docs:				# Curr doc in D_nr
@@ -181,12 +197,13 @@ class Index:
 		return rel_vect, nrel_vect
 
 
-	def r_getlength(self, query):
+	def getlength(self, query):
 		# Used to get length of modified vector
 		query_length = 0
 		for term, val in query.items():
 			query_length += m.pow(val, 2)
-		return query, query_length
+		query_length = m.sqrt(query_length)
+		return query_length
 
 
 	def calc_tfidf_query(self, query_terms):
@@ -202,23 +219,22 @@ class Index:
 				continue
 			elif term not in self.index.keys():
 				continue
-			elif term not in query:
-				query[term] = 1
-				continue
 			query[term] += 1
 		# Calculate tf-idf for query terms
-		for term, freq in query.items():
+		for term, tf in query.items():
 			idf = self.index[term][0]
-			wtf = 1 + m.log10(freq)
-			query[term] = wtf*idf
-			query_length += m.pow((wtf*idf), 2)
-		# Length of query terms
+			wtf = 1 + m.log10(tf)
+			tfidf = wtf * idf
+			query[term] = tfidf
+			query_length += m.pow(tfidf, 2)
+		# Calculate L2
 		query_length = m.sqrt(query_length)
 		return query, query_length
 
 
-	def r_calc_query(self, query_terms):
+	def calc_rquery(self, query_terms):
 		# Calculates a simple query vector (e.g. [1,1,2]
+		# This will be the original query vector
 		query = c.defaultdict(int)
 		tokens = re.split('\W+', query_terms.lower())
 		for term in tokens:
@@ -233,7 +249,7 @@ class Index:
 		return query
 
 
-	def r_add_vectors(self, v_one, v_two):
+	def add_vectors(self, v_one, v_two):
 		# This method will be used to sum vectors
 		new_query = c.defaultdict(float)
 		for term,val in v_one.items():
@@ -249,7 +265,7 @@ class Index:
 		return new_query
 
 
-	def r_str_to_int(self, pos, neg):
+	def str_to_int(self, pos, neg):
 		# Converts user feedback into integers
 		for i in range(len(pos)):
 			pos[i] = eval(pos[i])
@@ -275,3 +291,4 @@ if __name__ == '__main__':
 	x = Index('TIME.ALL', 'TIME.STP')
 	x.buildIndex()
 	x.query(' BACKGROUND OF THE NEW CHANCELLOR OF WEST GERMANY, LUDWIG ERHARD . ', 10)
+#	x.query(' KENNEDY ADMINISTRATION PRESSURE ON NGO DINH DIEM TO STOP SUPPRESSING THE BUDDHISTS . ', 10)
