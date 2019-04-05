@@ -12,3 +12,8 @@
 
 ### Assignment 3
 1. Creating a TF-IDF Inverted Index
+2. Implement Exact Top K (from Assignment 2)
+3. Implement Rocchio's SMART Algorithm for Relevance Feedback
+
+### Assignment 4
+1. Implement PageRank IR
