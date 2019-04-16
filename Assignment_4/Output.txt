@@ -1,0 +1,13 @@
+Output for file test3.txt
+Using initial vector with value 1/7 for each element
+Doc:	PageRank Score:		
+==========================
+D6	0.30118061808812835
+D3	0.2431291653443342
+D4	0.21009297515821634
+D2	0.11659831830394522
+D0	0.0544647616146892
+D1	0.03726708074534148
+D5	0.03726708074534148
+==========================
+PageRank generated in 0.002162999997381121 seconds.
