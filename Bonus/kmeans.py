@@ -26,15 +26,11 @@ class Kmeans:
 		# closest to its centroid, average RSS value, and computation time.
 		start = time.perf_counter()
 		self.buildIndex()									# Build Index
-		for i in range(K):									# Initial Centroids
+		for i in range(K):									# Rand Centroids
 			self.centroids[r.randint(1,K)] = []
-		print(self.centroids)
-		self.buildClusters()
-		# Initialization
-		# Reassignment of vectors
-		# Recomputation of
-		# centroids
-		# Repeat until convergence
+		while True:
+			self.buildClusters()							# Assign/Reassign
+			
 		return
 
 
