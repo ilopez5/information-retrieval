@@ -20,40 +20,57 @@ class Index:
 		self.group = {}
 
 	def buildIndex(self):
-		#function to read documents from collection, tokenize and build the index with tokens
+		# function to read documents from collection, tokenize and build the
+		# index with tokens
 		start = time.perf_counter()
-		########################### Building our Index ###############################
+
 		for docID, doc in enumerate(os.listdir(self.path), 1):
+			# read document
 			with open(os.path.join(self.path, doc), 'r') as file_obj:
 				doc_string = file_obj.read().lower()
+
+			# filter 'None' entries
 			tok_list = filter(None, re.split(r"\W+", doc_string))
+
 			self.documents[docID] = [doc, [], [], [], []]
 			for pos, term in enumerate(tok_list, 1):
 				if term in self.stop_list:
+					# ignore stop list terms
 					continue
-				elif term not in self.index: # first time term appears in INDEX
+				elif term not in self.index:
+					# first appearance of term in index, create an entry
 					self.index[term] = [0, (docID, 1, [pos])]
 				else:
-					for i in range(1,len(self.index[term])):
-						curr_docID, _, positions = self.index[term][i]
-						if curr_docID == docID: # not the first time term appears in THIS document
+					# update positions list of relevant documents
+					for entry in self.index[term][1:]:
+						current_docID, _, positions = entry
+						if current_docID == docID:
+							# log new position of this term in document
 							positions.append(pos)
 							break
-						elif i == len(self.index[term])-1: # First time term appears in this document
+						elif entry == self.index[term][-1]:
+							# reached the end, make a new entry
 							self.index[term].append((docID, 1, [pos]))
+
 		################# Index Built, Now Insert IDF & Weighted TF ##################
 		# N = len(self.documents)	| df_t = len(self.index[term]) - 1	| idf_t = log10(N/df_t)
 		for term in self.index:
-			self.index[term][0] = round(math.log10((len(self.documents)) / (len(self.index[term]) - 1)), 4)		# IDF
-			for i in range(1,len(self.index[term])):
-				############ Determine R #################
-				if (len(self.index[term]) - 1) <= 5:
+			N = len(self.documents)
+			df_t = len(self.index[term]) - 1
+			idf_t = math.log10(N / df_t)
+
+			# calculate/store IDF
+			self.index[term][0] = round(idf_t, 4)
+
+			# iterate through posting list
+			for i in range(1, len(self.index[term])):
+				# determine R
+				if df_t <= 5:
 					r = len(self.index[term])
 				else:
 					r = (len(self.index[term]) // 2) + 1
-				##########################################
 
-				##################### Insert weighted tf into index ######################
+				# insert weighted tf into index
 				w = 1 + math.log10(len(self.index[term][i][2]))
 				self.index[term][i] = (self.index[term][i][0], w, self.index[term][i][2]) # Insert weighted frequency
 				##########################################################################
@@ -65,13 +82,42 @@ class Index:
 					for j in range(len(self.champion[term])):										# Iterate thru, comparing scores
 						if self.champion[term][j][1] <= w:												# Insert, keeping list sorted
 							self.champion[term].insert(j, (self.index[term][i][0], w))
-							if len(self.champion[term]) >= r:											# Keeps length of list at r 
+							if len(self.champion[term]) >= r:											# Keeps length of list at r
 								_ = self.champion[term].pop()
 							break
 						elif j == (len(self.champion[term]) - 1) and len(self.champion[term]) <= r: # We have reached end of list and still under r
 							self.champion[term].append((self.index[term][i][0], w))
 							break
 				###########################################################################
+			# for entry in self.index[term][1:]:
+			# 	# determine R (arbitrary)
+			# 	if df_t <= 5:
+			# 		r = len(self.index[term])
+			# 	else:
+			# 		r = (len(self.index[term]) // 2) + 1
+
+			# 	# insert weighted tf into index
+			# 	docID, _, positions = entry
+			# 	w = 1 + math.log10(len(positions))
+			# 	entry = (docID, w, positions)
+
+			# 	if term not in self.champion:
+			# 		# store (docID, weight), no posting list
+			# 		self.champion[term] = [(docID, w)]
+			# 	else:
+			# 		for idx, champ in enumerate(self.champion[term]):
+			# 			champ_docID, champ_weight = champ
+			# 			if champ_weight <= w:
+			# 				# insert doc into champions list at idx
+			# 				champ.insert(idx, (docID, w))
+			# 				if len(champ) >= r:
+			# 					# remove lowest score, keep champ list at size r
+			# 					_ = champ.pop()
+			# 				break
+			# 			elif champ == self.champion[term][-1] and len(champ) <= r:
+			# 				# we reached end, but have space, so append
+			# 				champ.append((docID, w))
+
 		end = time.perf_counter()
 		print("Index built in {} seconds.".format(end-start))
 
@@ -95,7 +141,7 @@ class Index:
 				for i in range(1, len(self.index[term])):
 						self.documents[self.index[term][i][0]][1].append((term, self.index[term][i][1]*self.index[term][0]))
 			#######################################################################
-			
+
 			###################### Normalizing Doc Vectors ########################
 			ltwo_d = 0
 			for doc in self.documents:
@@ -116,7 +162,7 @@ class Index:
 						break
 					elif tup == len(self.documents[doc][1])-1:
 						break
-			# Inserts doc/score, keeps rank order 
+			# Inserts doc/score, keeps rank order
 			for i in range(len(rank_list)):
 				if cos_score == 0:
 					rank_list.append((doc, cos_score))
@@ -201,7 +247,7 @@ class Index:
 						break
 					elif tup == len(self.documents[doc][3])-1:
 						break
-			# Inserts doc/score, keeps rank order 
+			# Inserts doc/score, keeps rank order
 			for i in range(len(rank_list)):
 				#print(doc, cos_score)
 				if cos_score == 0:
@@ -213,7 +259,7 @@ class Index:
 		###################### Ranked List Now Populated ######################
 
 		################### Print Top K & Performance Time ####################
-		print("Champs Top {}".format(k))		
+		print("Champs Top {}".format(k))
 		for i in range(k):
 			print(f"{self.documents[rank_list[i][0]][0]:<13}, Score: {round(rank_list[i][1], 6)}")
 		end = time.perf_counter()
@@ -246,7 +292,7 @@ class Index:
 				for i in range(1, len(self.index[term])):
 					self.documents[self.index[term][i][0]][2].append((term, self.index[term][i][1]*self.index[term][0]))
 			#######################################################################
-			
+
 			###################### Normalizing Doc Vectors ########################
 			ltwo_d = 0
 			for doc in self.documents:
@@ -281,7 +327,7 @@ class Index:
 		###################### Ranked List Now Populated ######################
 
 		################### Print Top K & Performance Time ####################
-		print("Index C. Top {}".format(k))		  
+		print("Index C. Top {}".format(k))
 		for i in range(k):
 			print(f"{self.documents[rank_list[i][0]][0]:<13}, Score: {round(rank_list[i][1], 6)}")
 		end = time.perf_counter()
@@ -302,7 +348,7 @@ class Index:
 		for i in range(len(vector_q)):
 			vector_q[i] = (vector_q[i][0], vector_q[i][1] / norm_q)
 		############# Query vector is now normalized ##########################
-		
+
 		############# Create Clusters! #################
 		if len(self.group) == 0:
 			################## Generate Leaders ####################
@@ -312,7 +358,7 @@ class Index:
 			for lead in leaders:
 				self.group[lead] = []
 			########################################################
-			
+
 			###################### Generating Vectors for All Docs ####################
 			for term in self.index:
 				for i in range(1, len(self.index[term])):
@@ -348,7 +394,7 @@ class Index:
 						self.group[lead[0]].append(doc)
 						break
 		############## Clusters have been created ##############
-		
+
 		############## Compare Vector with Leaders #######################
 		order = []
 		for lead in self.group: # iterate over every leader
@@ -396,7 +442,7 @@ class Index:
 		# ##################################################################
 
 		# ################### Print Top K & Performance Time ####################
-		print("Cluster P. Top {}".format(k))		
+		print("Cluster P. Top {}".format(k))
 		for i in range(k):
 			print(f"{self.documents[rank_list[i][0]][0]:<13}, Score: {round(rank_list[i][1], 6)}")
 		end = time.perf_counter()
@@ -404,14 +450,14 @@ class Index:
 		########################## End of Function ############################
 
 	def print_dict(self):
-		#function to print the terms and posting list in the index
-		for term,pos_list in self.index.items():
-			print(term, ':', pos_list)
+		# function to print the terms and posting list in the index
+		for term, pos_list in self.index.items():
+			print("{0:10} => {1}".format(term, pos_list))
 
 	def print_doc_list(self):
 		# function to print the documents and their document id
 		for docID, doc in self.documents.items():
-			print("Doc ID: {0}	==> {1}".format(docID, doc[0]))
+			print("Doc ID: {0:5} ==> {1}".format(docID, doc[0]))
 
 if __name__ == '__main__':
 	index = Index('collection')
@@ -421,24 +467,25 @@ if __name__ == '__main__':
 		index.inexact_query_index_elimination('red china home', i)
 		index.inexact_query_champion('red china home', i)
 		index.inexact_query_cluster_pruning('red china home', i)
-	########################################################
-	index.exact_query('foreign town location', 4)
-	index.inexact_query_index_elimination('foreign town location', 4)
-	index.inexact_query_champion('foreign town location', 4)
-	index.inexact_query_cluster_pruning('foreign town location', 4)
-	#######################################################
-	index.exact_query('band russian soviet', 5)
-	index.inexact_query_index_elimination('band russian soviet', 5)
-	index.inexact_query_champion('band russian soviet', 5)
-	index.inexact_query_cluster_pruning('band russian soviet', 5)
-	#######################################################
-	index.exact_query('democratic institutions lobbies', 6)
-	index.inexact_query_index_elimination('democratic institutions lobbies', 6)
-	index.inexact_query_champion('democratic institutions lobbies', 6)
-	index.inexact_query_cluster_pruning('democratic institutions lobbies', 6)
-	#######################################################
-	index.exact_query('government party political', 7)
-	index.inexact_query_index_elimination('government party political', 7)
-	index.inexact_query_champion('government party political', 7)
-	index.inexact_query_cluster_pruning('government party political', 7)
-	########################################################
+
+	# ########################################################
+	# index.exact_query('foreign town location', 4)
+	# index.inexact_query_index_elimination('foreign town location', 4)
+	# index.inexact_query_champion('foreign town location', 4)
+	# index.inexact_query_cluster_pruning('foreign town location', 4)
+	# #######################################################
+	# index.exact_query('band russian soviet', 5)
+	# index.inexact_query_index_elimination('band russian soviet', 5)
+	# index.inexact_query_champion('band russian soviet', 5)
+	# index.inexact_query_cluster_pruning('band russian soviet', 5)
+	# #######################################################
+	# index.exact_query('democratic institutions lobbies', 6)
+	# index.inexact_query_index_elimination('democratic institutions lobbies', 6)
+	# index.inexact_query_champion('democratic institutions lobbies', 6)
+	# index.inexact_query_cluster_pruning('democratic institutions lobbies', 6)
+	# #######################################################
+	# index.exact_query('government party political', 7)
+	# index.inexact_query_index_elimination('government party political', 7)
+	# index.inexact_query_champion('government party political', 7)
+	# index.inexact_query_cluster_pruning('government party political', 7)
+	# ########################################################
