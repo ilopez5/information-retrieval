@@ -20,7 +20,7 @@ probably do better.
 1. Creating an Inverted Index
 2. Implementing an AND query Boolean search
 
-### Assignment 2 - Ranked Retrival
+### Assignment 2 - Ranked Retrieval
 1. Creating an Inverted Index
 2. Implementing Exact Top K Ranked Retrieval
 3. Implementing Inexact Top K Retrieval methods (Champions List, Index Compression, Cluster Pruning)
